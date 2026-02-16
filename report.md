@@ -143,6 +143,75 @@ public static boolean reflectionEquals(
 7. Are exceptions taken into account in the given measurements?
 8. Is the documentation clear w.r.t. all the possible outcomes?
 
+
+### Jannis:
+
+```java 
+
+public EqualsBuilder append(Object lhs, Object rhs) {
+   if (!isEquals) {  // +1
+     return this;  // -1
+   }
+   if (lhs == rhs) { // +1
+      return this;  // -1
+   }
+   if (lhs == null || rhs == null) {  // +2
+      this.setEquals(false);
+      return this; // -1
+   }
+   Class<?> lhsClass = lhs.getClass();
+   if (!lhsClass.isArray()) {  // +1
+      if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {  // +2
+         isEquals = (((BigDecimal) lhs).compareTo((BigDecimal) rhs) == 0);
+      } else {
+         // The simple case, not an array, just test the element
+         isEquals = lhs.equals(rhs);
+      }
+   } else if (lhs.getClass() != rhs.getClass()) {  // +1
+      // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
+      this.setEquals(false);
+
+      // 'Switch' on type of array, to dispatch to the correct handler
+      // This handles multi dimensional arrays of the same depth
+   } else if (lhs instanceof long[]) {  // +1
+      append((long[]) lhs, (long[]) rhs);
+   } else if (lhs instanceof int[]) {  // +1
+      append((int[]) lhs, (int[]) rhs);
+   } else if (lhs instanceof short[]) {  // +1
+      append((short[]) lhs, (short[]) rhs);
+   } else if (lhs instanceof char[]) {  // +1
+      append((char[]) lhs, (char[]) rhs);
+   } else if (lhs instanceof byte[]) {  // +1
+      append((byte[]) lhs, (byte[]) rhs);
+   } else if (lhs instanceof double[]) {  // +1
+      append((double[]) lhs, (double[]) rhs);
+   } else if (lhs instanceof float[]) {  // +1
+      append((float[]) lhs, (float[]) rhs);
+   } else if (lhs instanceof boolean[]) {  // +1
+      append((boolean[]) lhs, (boolean[]) rhs);
+   } else {
+      // Not an array of primitives
+      append((Object[]) lhs, (Object[]) rhs);
+   }
+   return this;  // -1
+   // π = 13, s = 11
+   // M = π - s + 2 = 4
+
+   // CC count in the method = 12
+}  // Total CC count  = 14  (12 + 2)
+```
+1. The CC count with the method from the lecture is 14, while Lizard reported 17. This is due to different ways of counting. Lizard counts decision points  + 1.
+
+2. The function is 46 lines long, which is still an acceptable length. The high complexity comes from the high number of ```else if``` statements, which  in this function are used to differentiate between different cases.
+
+3. This method is part of a builder and comapres two values ````lhs``` and ```rhs``` and appends the result to the running equality check stored in the builder. If the values are arrays, it calls the append method with the correct type, so that the arrays are compared properly, and then returns the same builder instance.
+
+4. No exceptions in this method
+
+5. The class itself has javadocs as documentation, which helps to understand the method. The method itself has some comments too, but an additional docstring would have been benefetial to faster understand the method and what its purpose is. 
+
+
+
 ## Refactoring
 
 Plan for refactoring complex code:
