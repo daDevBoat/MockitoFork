@@ -211,6 +211,47 @@ public EqualsBuilder append(Object lhs, Object rhs) {
 5. The class itself has javadocs as documentation, which helps to understand the method. The method itself has some comments too, but an additional docstring would have been benefetial to faster understand the method and what its purpose is. 
 
 
+### Arnau - matches(object)
+
+```java
+    @Override
+    public boolean matches(Object actual) {
+        Object wanted = getWanted();
+        if (wanted == null || actual == null) { //+1 +1 = +2
+            return super.matches(actual); // -1
+        } else if (wanted instanceof boolean[] && actual instanceof boolean[]) { // +1 +1 = +2
+            return Arrays.equals((boolean[]) wanted, (boolean[]) actual); // -1
+        } else if (wanted instanceof byte[] && actual instanceof byte[]) { // +1 +1 = +2
+            return Arrays.equals((byte[]) wanted, (byte[]) actual); // -1
+        } else if (wanted instanceof char[] && actual instanceof char[]) { // +1 +1 = +2
+            return Arrays.equals((char[]) wanted, (char[]) actual); // -1 
+        } else if (wanted instanceof double[] && actual instanceof double[]) { // +1 +1 = +2
+            return Arrays.equals((double[]) wanted, (double[]) actual); // -1
+        } else if (wanted instanceof float[] && actual instanceof float[]) { // +1 +1 = +2
+            return Arrays.equals((float[]) wanted, (float[]) actual); // -1
+        } else if (wanted instanceof int[] && actual instanceof int[]) { // +1 +1 = +2
+            return Arrays.equals((int[]) wanted, (int[]) actual); // -1
+        } else if (wanted instanceof long[] && actual instanceof long[]) { // +1 +1 = +2
+            return Arrays.equals((long[]) wanted, (long[]) actual); // -1
+        } else if (wanted instanceof short[] && actual instanceof short[]) { // +1 +1 = +2
+            return Arrays.equals((short[]) wanted, (short[]) actual); // -1
+        } else if (wanted instanceof Object[] && actual instanceof Object[]) { // +1 +1 = +2
+            return Arrays.equals((Object[]) wanted, (Object[]) actual); // -1
+        }
+        return false; // -1
+    }
+
+   // π = 20, s = 11
+   // M = π - s + 2 = 20 - 11 + 2 = 11
+```
+
+1.
+   * No, as I am using a different approach compared to the lizard tooal to calculate the cyclomatic complexity. For the manual calculations, I used the (π − s + 2) that resulted in a complexity of **11**. The lizard tool reported a complexity of **21**. 
+   * Yes, the difference arises because Lizard counts every individual decision point + 1 to calculate the cyclomatic complexity. 
+2. The function is both complex and long, it contains one **if**, nine **else if** branches,    multiple **logical operators**. The logic in each branch is simple, but the repetition of conditionals increases both the length and the structural complexity of the function.
+3. The purpose of the method is to compare two objects, (**wanted** and **actual**) and determine whether they match. This method manually checks the runtime type of the objects and dispatches the comparison to the correct Arrays.equals() overload.
+4. No, neither the manual calculation nor Lizard's CNN includes expections.
+5. There is no specific documentation provided for the matches function as the overall purpose of the function is relatively evident from the implementation itself.
 
 ## Refactoring
 
