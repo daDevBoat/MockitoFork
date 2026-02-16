@@ -24,6 +24,58 @@ for each project, along with reason(s) why you changed to a different one.
 
 ## Complexity
 
+
+#### Jonatan
+```java
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) { // +1
+        return true; // -1
+    }
+    if (obj == null) { // +1
+        return false; // -1
+    }
+    if (getClass() != obj.getClass()) { // +1
+        return false; // -1
+    }
+    SerializableMethod other = (SerializableMethod) obj;
+    if (declaringClass == null) { // +1
+        if (other.declaringClass != null) { // +1
+                return false; // -1
+        }
+    } else if (!declaringClass.equals(other.declaringClass)) { // +1
+        return false; // -1
+    }
+    if (methodName == null) { // +1
+        if (other.methodName != null) { // +1
+                return false; // -1
+        }
+    } else if (!methodName.equals(other.methodName)) { // +1
+        return false; // -1
+    }
+    if (!Arrays.equals(parameterTypes, other.parameterTypes)) { // +1
+        return false; // -1
+    }
+    if (returnType == null) { // +1
+        if (other.returnType != null) { // +1
+                return false; // -1
+        }
+    } else if (!returnType.equals(other.returnType)) { // +1
+        return false; // -1
+    }
+    return true; // -1
+    // π = 13, s = 11
+    // M = π - s + 2 = 4
+}
+```
+
+1.`M = π - s + 2` yielded a much lower complexity than Lizard. Lizard uses a different formula which does not subtract exit points (and yielded 14 as complexity). It is simple to understand why an exit just after a decision shouldn't increase complexity, in that sense it seems more clear than Lizard's formula.
+2. The `equals` function is not particularly long, just complex.
+3. The purpose is overriding the equals function (which just compares object references) for the `SerializableMethod` class, in order to compare with custom logic.
+4. There are no exceptions.
+5. The code is pretty self-explanatory and there is no need to document further the possible outcomes.
+
+
 1. What are your results for five complex functions?
    * Did all methods (tools vs. manual count) get the same result?
    * Are the results clear?
