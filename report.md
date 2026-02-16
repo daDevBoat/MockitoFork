@@ -29,8 +29,94 @@ for each project, along with reason(s) why you changed to a different one.
    * Are the results clear?
 2. Are the functions just complex, or also long?
 3. What is the purpose of the functions?
-4. Are exceptions taken into account in the given measurements?
+4. Are exceptions taken into account in the given measurements? 
 5. Is the documentation clear w.r.t. all the possible outcomes?
+
+### Alexander Mannertorn
+
+```java
+    //pi = number of decision
+    //s = number of exit
+    private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
+        Set<Class<?>> targets = new HashSet<Class<?>>();
+
+        try {
+            for (Class<?> type : types) {
+                //pi=1
+                if (flat) {
+                    //pi = 3
+                    if (!mocked.contains(type) && flatMocked.add(type)) {
+                        assureInitialization(type);
+                        targets.add(type);
+                    }
+                } else {
+                    do {
+                        //pi = 4
+                        if (mocked.add(type)) {
+                            //pi = 5
+                            if (!flatMocked.remove(type)) {
+                                assureInitialization(type);
+                                targets.add(type);
+                            }
+                            addInterfaces(targets, type.getInterfaces());
+                        }
+                        type = type.getSuperclass();
+                        //pi = 6
+                    } while (type != null);
+                }
+            }
+        } catch (Throwable t) {
+            for (Class<?> target : targets) {
+                mocked.remove(target);
+                flatMocked.remove(target);
+            }
+            // s = 1
+            throw t;
+        }
+        //pi = 7
+        if (!targets.isEmpty()) {
+            try {
+                assureCanReadMockito(targets);
+                instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
+                Throwable throwable = lastException;
+                //pi = 8
+                if (throwable != null) {
+                    // s = 2
+                    throw new IllegalStateException(
+                            join(
+                                    "Byte Buddy could not instrument all classes within the mock's type hierarchy",
+                                    "",
+                                    "This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:",
+                                    " - Compiled by older versions of scalac",
+                                    " - Classes that are part of the Android distribution"),
+                            throwable);
+                }
+            } catch (Exception exception) {
+                for (Class<?> failed : targets) {
+                    mocked.remove(failed);
+                    flatMocked.remove(failed);
+                }
+                //s = 3
+                throw new MockitoException("Could not modify all classes " + targets, exception);
+            } finally {
+                lastException = null;
+            }
+        }
+
+        mocked.expungeStaleEntries();
+        flatMocked.expungeStaleEntries();
+    }
+        //M = cyclomatic complexity 
+        //M = pi - s + 2 = 8 - 3 + 2 = 5 + 2 = 7
+```
+1. I counted the cyclomatic complexity to 7 for the triggerRetransformation() function, but
+the Lizard tool said the cylomatic complexity number (CCN) was 14, this is because the Lizard tool
+uses another way of counting the CCN then the method we have used where the cyclomatic complexity
+is equal to the number of decisions minus the number of exits plus 2.
+2. The triggerRetransformation() function is not just complex but also quite long (60 lines of code) 
+3. The purpose of the triggerRetransformation() is to collect a set of classes that needs to be reinstrumented and then call instrumentation.retransformClasses(...).
+4. Yes, since we count the throws as an exit point
+5. There is no documentation specific for the triggerRetransformation() function but the code makes all possible outcomes pretty clear. 
 
 ## Refactoring
 
