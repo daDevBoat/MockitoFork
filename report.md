@@ -6,7 +6,7 @@ has to be delivered in a standard, cross-platform format.
 
 ## Project
 
-Name:
+Name: 
 
 URL:
 
@@ -23,9 +23,38 @@ for each project, along with reason(s) why you changed to a different one.
 
 
 ## Complexity
+To count the complexity by hand, we used the formula provided in the lecture, where
+
+- M = Cyclographic Complexity
+- π = number of decision points
+- s = number of exit points
+- M = π - s + 2
+
+### Questions:
+
+1. **What are your results for five complex functions?**
+`M = π - s + 2` yielded a lower complexity than Lizard. Lizard uses a different formula which does not subtract exit points, but only counts the decsions points and adds 1. We understodd both ways of counting, and that both have advantages and drawbacks. Our results matched when we cross-checked each other. 
+
+2. **Are the functions just complex, or also long?**
+All of the five functions are complex, but not necessary long, with the longest being 60 lines of code. They mostly score this high complexity through a series of if statements.
+
+3. **What is the purpose of the functions?**
+The purpose for each function is explained below it.
+
+4. **Are exceptions taken into account in the given measurements?**
+We considered `throws` as exit points, but `catch` blocks not as a decision point, as declared in the lecture. This means that excpetion handling does not intorduce any additional decision points and don't increase the CC count. 
+Lizard does consider `catch` blocks as decision points, if we were to co the same in our manual counting, the comlexity count would increase. 
 
 
-#### Jonatan
+5. **Is the documentation clear w.r.t. all the possible outcomes?**
+Comments regarding the documentation are below each of the functions. 
+
+### <u>Methods</u>:
+
+### Jonatan:
+*equals@101-137@./mockito-core/src/main/java/org/mockito/internal/invocation/SerializableMethod.java*
+- CC reported by Lizard: 14
+- CC counted by hand: 4
 ```java
 @Override
 public boolean equals(Object obj) {
@@ -68,13 +97,14 @@ public boolean equals(Object obj) {
     // M = π - s + 2 = 4
 }
 ```
+-  The purpose is overriding the equals function (which just compares object references) for the `SerializableMethod` class, in order to compare with custom logic.
+- The code is pretty self-explanatory and there is no need to document further the possible outcomes.
 
-1.`M = π - s + 2` yielded a much lower complexity than Lizard. Lizard uses a different formula which does not subtract exit points (and yielded 14 as complexity). It is simple to understand why an exit just after a decision shouldn't increase complexity, in that sense it seems more clear than Lizard's formula.
-2. The `equals` function is not particularly long, just complex.
-3. The purpose is overriding the equals function (which just compares object references) for the `SerializableMethod` class, in order to compare with custom logic.
-4. There are no exceptions.
-5. The code is pretty self-explanatory and there is no need to document further the possible outcomes.
+
 ### Elias
+*reflectionEquals@223-270@./mockito-core/src/main/java/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java*
+- CC reported by Lizard: 12
+- CC counted by hand: 7
 ```java
 public static boolean reflectionEquals(
             Object lhs,
@@ -127,28 +157,16 @@ public static boolean reflectionEquals(
     // π = 11, s = 6
     // M = π - s + 2 = 7
 ``` 
-1. The Lizard tool gave the reflectionEquals function a cyclomatic complexity of 12, while the manual counting gave it 7. This is due to Lizard estimating cyclomatic complexity by doing **π + 1** while we use the method described in the lecture as **M = π - s + 2** where **π** is number of decisions and **s** is number of exit points. 
-2. The reflectionEquals function is complex, and is acceptably long at 41 lines of code.
-3. The purpose of the reflectionEquals function is to check if the lhs is equal to the right hand side and return true or false based on that.
-4. No exceptions are thrown by this function.
-5. The documentation is not very clear w.r.t all possible outcomes, but there is some helpful comments in terms of understanding how the function works.
-
-
-
-1. What are your results for five complex functions?
-   * Did all methods (tools vs. manual count) get the same result?
-   * Are the results clear?
-2. Are the functions just complex, or also long?
-3. What is the purpose of the functions?
-4. Are exceptions taken into account in the given measurements? 
-5. Is the documentation clear w.r.t. all the possible outcomes?
-5. Are the functions just complex, or also long?
-6. What is the purpose of the functions?
-7. Are exceptions taken into account in the given measurements?
-8. Is the documentation clear w.r.t. all the possible outcomes?
+- The purpose of the reflectionEquals function is to check if the lhs is equal to the right hand side and return true or false based on that.
+- The documentation is not very clear w.r.t all possible outcomes, but there is some helpful comments in terms of understanding how the function works.
 
 
 ### Jannis:
+
+*append@341-387@./mockito-core/src/main/java/org/mockito/internal/matchers/apachecommons/EqualsBuilder.java*
+- CC reported by Lizard: 17
+- CC counted by hand: 14
+
 
 ```java 
 
@@ -198,24 +216,17 @@ public EqualsBuilder append(Object lhs, Object rhs) {
       append((Object[]) lhs, (Object[]) rhs);
    }
    return this;  // -1
-   // π = 13, s = 11
-   // M = π - s + 2 = 4
-
-   // CC count in the method = 12
-}  // Total CC count  = 14  (12 + 2)
+   // π = 16, s = 4
+   // M = π - s + 2 = 14
 ```
-1. The CC count with the method from the lecture is 14, while Lizard reported 17. This is due to different ways of counting. Lizard counts decision points  + 1.
-
-2. The function is 46 lines long, which is still an acceptable length. The high complexity comes from the high number of ```else if``` statements, which  in this function are used to differentiate between different cases.
-
-3. This method is part of a builder and comapres two values ````lhs``` and ```rhs``` and appends the result to the running equality check stored in the builder. If the values are arrays, it calls the append method with the correct type, so that the arrays are compared properly, and then returns the same builder instance.
-
-4. No exceptions in this method
-
-5. The class itself has javadocs as documentation, which helps to understand the method. The method itself has some comments too, but an additional docstring would have been benefetial to faster understand the method and what its purpose is. 
+- This method is part of a builder and comapres two values ````lhs``` and ```rhs``` and appends the result to the running equality check stored in the builder. If the values are arrays, it calls the append method with the correct type, so that the arrays are compared properly, and then returns the same builder instance.
+- The class itself has javadocs as documentation, which helps to understand the method. The method itself has some comments too, but an additional docstring would have been benefetial to faster understand the method and what its purpose is. 
 
 
-### Arnau - matches(object)
+### Arnau
+*matches@17-41@./mockito-core/src/main/java/org/mockito/internal/matchers/ArrayEquals.java*
+- CC reported by Lizard: 21
+- CC counted by hand: 11
 
 ```java
     @Override
@@ -248,16 +259,15 @@ public EqualsBuilder append(Object lhs, Object rhs) {
    // π = 20, s = 11
    // M = π - s + 2 = 20 - 11 + 2 = 11
 ```
-
-1.
-   * No, as I am using a different approach compared to the lizard tooal to calculate the cyclomatic complexity. For the manual calculations, I used the (π − s + 2) that resulted in a complexity of **11**. The lizard tool reported a complexity of **21**. 
-   * Yes, the difference arises because Lizard counts every individual decision point + 1 to calculate the cyclomatic complexity. 
-2. The function is both complex and long, it contains one **if**, nine **else if** branches,    multiple **logical operators**. The logic in each branch is simple, but the repetition of conditionals increases both the length and the structural complexity of the function.
-3. The purpose of the method is to compare two objects, (**wanted** and **actual**) and determine whether they match. This method manually checks the runtime type of the objects and dispatches the comparison to the correct Arrays.equals() overload.
-4. No, neither the manual calculation nor Lizard's CNN includes expections.
-5. There is no specific documentation provided for the matches function as the overall purpose of the function is relatively evident from the implementation itself.
+- The purpose of the method is to compare two objects, (**wanted** and **actual**) and determine whether they match. This method manually checks the runtime type of the objects and dispatches the comparison to the correct Arrays.equals() overload.
+- There is no specific documentation provided for the matches function as the overall purpose of the function is relatively evident from the implementation itself.
 
 ### Alexander Mannertorn
+
+*triggerRetransformation@272-331@./mockito-core/src/main/java/org/mockito/internal/creation/bytebuddy/InlineBytecodeGenerator.java*
+- CC reported by Lizard: 14
+- CC counted by hand: 7
+
 
 ```java
     //pi = number of decision
@@ -334,14 +344,8 @@ public EqualsBuilder append(Object lhs, Object rhs) {
         //M = cyclomatic complexity 
         //M = pi - s + 2 = 8 - 3 + 2 = 5 + 2 = 7
 ```
-1. I counted the cyclomatic complexity to 7 for the triggerRetransformation() function, but
-the Lizard tool said the cylomatic complexity number (CCN) was 14, this is because the Lizard tool
-uses another way of counting the CCN then the method we have used where the cyclomatic complexity
-is equal to the number of decisions minus the number of exits plus 2.
-2. The triggerRetransformation() function is not just complex but also quite long (60 lines of code) 
-3. The purpose of the triggerRetransformation() is to collect a set of classes that needs to be reinstrumented and then call instrumentation.retransformClasses(...).
-4. Yes, since we count the throws as an exit point
-5. There is no documentation specific for the triggerRetransformation() function but the code makes all possible outcomes pretty clear. 
+- The purpose of the triggerRetransformation() is to collect a set of classes that needs to be reinstrumented and then call instrumentation.retransformClasses(...).
+- There is no documentation specific for the triggerRetransformation() function but the code makes all possible outcomes pretty clear. 
 
 ## Refactoring
 
