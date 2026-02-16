@@ -74,15 +74,74 @@ public boolean equals(Object obj) {
 3. The purpose is overriding the equals function (which just compares object references) for the `SerializableMethod` class, in order to compare with custom logic.
 4. There are no exceptions.
 5. The code is pretty self-explanatory and there is no need to document further the possible outcomes.
+### Elias
+```java
+public static boolean reflectionEquals(
+            Object lhs,
+            Object rhs,
+            boolean testTransients,
+            Class<?> reflectUpToClass,
+            String[] excludeFields) {
+        if (lhs == rhs) { # +1
+            return true; # -1
+        }
+        if (lhs == null || rhs == null) { # +2
+            return false;   # -1
+        }
+        // Find the leaf class since there may be transients in the leaf
+        // class or in classes between the leaf and root.
+        // If we are not testing transients or a subclass has no ivars,
+        // then a subclass can test equals to a superclass.
+        Class<?> lhsClass = lhs.getClass();
+        Class<?> rhsClass = rhs.getClass();
+        Class<?> testClass;
+        if (lhsClass.isInstance(rhs)) {     # +1
+            testClass = lhsClass;
+            if (!rhsClass.isInstance(lhs)) {    # +1
+                // rhsClass is a subclass of lhsClass
+                testClass = rhsClass;
+            }
+        } else if (rhsClass.isInstance(lhs)) {  # +1
+            testClass = rhsClass;
+            if (!lhsClass.isInstance(rhs)) {    # +1
+                // lhsClass is a subclass of rhsClass
+                testClass = lhsClass;
+            }
+        } else {
+            // The two classes are not related.
+            return false;   # -1
+        }
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {  # +1
+            return false;   # -1
+        }
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { # +2
+            testClass = testClass.getSuperclass();
+            if (reflectionAppend(
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {   # +1
+                return false;   # -1
+            }
+        }
+        return equalsBuilder.isEquals();    # -1
+    }
+    // π = 11, s = 6
+    // M = π - s + 2 = 7
+``` 
+1. The Lizard tool gave the reflectionEquals function a cyclomatic complexity of 12, while the manual counting gave it 7. This is due to Lizard estimating cyclomatic complexity by doing **π + 1** while we use the method described in the lecture as **M = π - s + 2** where **π** is number of decisions and **s** is number of exit points. 
+2. The reflectionEquals function is complex, and is acceptably long at 41 lines of code.
+3. The purpose of the reflectionEquals function is to check if the lhs is equal to the right hand side and return true or false based on that.
+4. No exceptions are thrown by this function.
+5. The documentation is not very clear w.r.t all possible outcomes, but there is some helpful comments in terms of understanding how the function works.
+
 
 
 1. What are your results for five complex functions?
    * Did all methods (tools vs. manual count) get the same result?
    * Are the results clear?
-2. Are the functions just complex, or also long?
-3. What is the purpose of the functions?
-4. Are exceptions taken into account in the given measurements?
-5. Is the documentation clear w.r.t. all the possible outcomes?
+5. Are the functions just complex, or also long?
+6. What is the purpose of the functions?
+7. Are exceptions taken into account in the given measurements?
+8. Is the documentation clear w.r.t. all the possible outcomes?
 
 ## Refactoring
 
