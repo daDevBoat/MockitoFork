@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.AdditionalMatchers.cmpEq;
@@ -20,9 +21,28 @@ import static org.mockito.AdditionalMatchers.leq;
 import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyByte;
+import static org.mockito.ArgumentMatchers.anyChar;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyShort;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.assertArg;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.endsWith;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.matches;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyByte;
@@ -61,6 +81,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockito.internal.matchers.ArrayEquals;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -387,6 +408,22 @@ public class MatchersTest extends TestBase {
 
         assertEquals(null, mock.oneArray(new boolean[] {true, false}));
         assertEquals(null, mock.oneArray(new boolean[] {true, true, false}));
+    }
+
+    @Test
+    public void array_equals_matches_should_return_false_for_incompatible_primitive_arrays() {
+        /* Contract: matches(Object) must return false when wanted and actual are primitive arrays of different types, 
+        for example: int[] vs long[], even if numeric values are equivalent */
+        ArrayEquals matcher = new ArrayEquals(new int[] {1, 2});
+        assertFalse(matcher.matches(new long[] {1L, 2L}));
+    }
+
+    @Test
+    public void should_return_false_when_actual_is_null_and_wanted_is_not_null() {
+        /* Contract: matches(Object) must enter the branch when wanted != null and actual == null,
+        and must return false via super.matches(actual) */
+        ArrayEquals matcher = new ArrayEquals(new int[] {1, 2});
+        assertFalse(matcher.matches(null));
     }
 
     @Test
