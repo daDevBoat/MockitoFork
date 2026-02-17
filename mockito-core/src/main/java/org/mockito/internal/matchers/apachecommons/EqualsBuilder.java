@@ -358,51 +358,68 @@ class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(Object lhs, Object rhs) {
-        if (!isEquals) {
-            return this;
+        if (!isEquals) { // +1
+            return this;  // -1
         }
-        if (lhs == rhs) {
-            return this;
+        if (lhs == rhs) {  // +1
+            return this;  // -1
         }
-        if (lhs == null || rhs == null) {
+        if (lhs == null || rhs == null) { // +2
             this.setEquals(false);
-            return this;
+            return this; // -1
         }
         Class<?> lhsClass = lhs.getClass();
-        if (!lhsClass.isArray()) {
-            if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {
+        if (!lhsClass.isArray()) { // +1
+            if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {  // +2
                 isEquals = (((BigDecimal) lhs).compareTo((BigDecimal) rhs) == 0);
             } else {
                 // The simple case, not an array, just test the element
                 isEquals = lhs.equals(rhs);
             }
-        } else if (lhs.getClass() != rhs.getClass()) {
+        } else if (lhs.getClass() != rhs.getClass()) {  // +1
             // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
             this.setEquals(false);
 
             // 'Switch' on type of array, to dispatch to the correct handler
             // This handles multi dimensional arrays of the same depth
-        } else if (lhs instanceof long[]) {
+        } else if (lhs instanceof long[]) {  // +1
             append((long[]) lhs, (long[]) rhs);
-        } else if (lhs instanceof int[]) {
+        } else if (lhs instanceof int[]) {  // +1
             append((int[]) lhs, (int[]) rhs);
-        } else if (lhs instanceof short[]) {
+        } else {
+            appendHelper(lhs, rhs);
+        }
+        return this;  // -1
+        // count = 6 + 2
+        // CC = 8
+    }
+
+    /**
+     * Helper method for the append method to reduce CC
+     * @param lhs  the left hand object
+     * @param rhs  the right hand object
+     * @return EqualsBuilder - used to chain calls.
+     */
+    public EqualsBuilder appendHelper(Object lhs, Object rhs) {
+        if (lhs instanceof short[]) {  // +1
             append((short[]) lhs, (short[]) rhs);
-        } else if (lhs instanceof char[]) {
+        } else if (lhs instanceof char[]) { // +1
             append((char[]) lhs, (char[]) rhs);
-        } else if (lhs instanceof byte[]) {
+        } else if (lhs instanceof byte[]) { // +1
             append((byte[]) lhs, (byte[]) rhs);
-        } else if (lhs instanceof double[]) {
+        } else if (lhs instanceof double[]) { // +1
             append((double[]) lhs, (double[]) rhs);
-        } else if (lhs instanceof float[]) {
+        } else if (lhs instanceof float[]) { // +1
             append((float[]) lhs, (float[]) rhs);
-        } else if (lhs instanceof boolean[]) {
+        } else if (lhs instanceof boolean[]) { // +1
             append((boolean[]) lhs, (boolean[]) rhs);
         } else {
             // Not an array of primitives
             append((Object[]) lhs, (Object[]) rhs);
         }
-        return this;
+        return this; // -1
+        // count = 5 + 2
+        // CC = 7
     }
 
     /**
