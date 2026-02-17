@@ -239,12 +239,10 @@ class EqualsBuilder {
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars,
         // then a subclass can test equals to a superclass.
-       
         Class<?> testClass = determineTestClass(lhs, rhs);  // calls the new method in the refactoring
         if (testClass == null) { // +1
             return false;   // -1
-        } 
-            
+        }
         EqualsBuilder equalsBuilder = new EqualsBuilder();
         if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) { // +1
             return false;   // -1
@@ -286,8 +284,6 @@ class EqualsBuilder {
         }
         return testClass;
     }
-    
-
     /**
      * <p>Appends the fields and values defined by the given object of the
      * given Class.</p>
