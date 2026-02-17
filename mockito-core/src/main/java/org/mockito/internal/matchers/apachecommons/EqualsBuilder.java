@@ -378,16 +378,13 @@ class EqualsBuilder {
 
             // 'Switch' on type of array, to dispatch to the correct handler
             // This handles multi dimensional arrays of the same depth
-        } else if (lhs instanceof long[]) {  // +1
-            append((long[]) lhs, (long[]) rhs);
-        } else if (lhs instanceof int[]) {  // +1
-            append((int[]) lhs, (int[]) rhs);
         } else {
-            appendHelper(lhs, rhs);
+            appendByType(lhs, rhs);
         }
         return this;  // -1
-        // count = 6 + 2
-        // CC = 8
+
+        // count = 5 + 2
+        // CC = 7
     }
 
     /**
@@ -396,8 +393,12 @@ class EqualsBuilder {
      * @param rhs  the right hand object
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder appendHelper(Object lhs, Object rhs) {
-        if (lhs instanceof short[]) {  // +1
+    public EqualsBuilder appendByType(Object lhs, Object rhs) {
+        if (lhs instanceof long[]) {  // +1
+            append((long[]) lhs, (long[]) rhs);
+        } else if (lhs instanceof int[]) {  // +1
+            append((int[]) lhs, (int[]) rhs);
+        } else if (lhs instanceof short[]) {  // +1
             append((short[]) lhs, (short[]) rhs);
         } else if (lhs instanceof char[]) { // +1
             append((char[]) lhs, (char[]) rhs);
@@ -414,8 +415,9 @@ class EqualsBuilder {
             append((Object[]) lhs, (Object[]) rhs);
         }
         return this; // -1
-        // count = 5 + 2
-        // CC = 7
+
+        // count = 7 + 2
+        // CC = 9
     }
 
     /**
