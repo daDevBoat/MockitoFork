@@ -374,7 +374,12 @@ The plan for refactoring the reflectionEquals is to extract section of code that
 The actual implementation can be found on this link: 
 https://github.com/daDevBoat/MockitoFork/commit/d4078c4d193115ceee5f02f2cace77eb0fb625a3
 
- 
+### Jonatan
+To refactor the `processAnnotationForMock` function, I extracted the common theme of having an if statement and then running one single line of code into a function that was called instead, does precisely that. This reduces the amount of `if`-statements drastically, and thus also the CC count, which was reduced from 11 in lizard to 4 (manual count was 9->1).
+
+Implementation is here:
+https://github.com/daDevBoat/MockitoFork/commit/6a8a2257123bc656f6860c03a29ac8c1c8c11328
+
 ## Coverage
 
 ### Tools
