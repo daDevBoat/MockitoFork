@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.configuration;
 
-import static org.mockito.internal.util.StringUtil.join;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -16,6 +14,7 @@ import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import static org.mockito.internal.util.StringUtil.join;
 import org.mockito.internal.util.Supplier;
 import org.mockito.quality.Strictness;
 
@@ -33,51 +32,50 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
     public static Object processAnnotationForMock(
             Mock annotation, Class<?> type, Supplier<Type> genericType, String name) {
         MockSettings mockSettings = Mockito.withSettings();
-        if (annotation.extraInterfaces().length > 0) { // never null
-            mockSettings.extraInterfaces(annotation.extraInterfaces());
-        }
-        if ("".equals(annotation.name())) {
+        applyIf(
+                annotation.extraInterfaces().length > 0,
+                () -> mockSettings.extraInterfaces(annotation.extraInterfaces()));
+        if ("".equals(annotation.name())) { // +1
             mockSettings.name(name);
         } else {
             mockSettings.name(annotation.name());
         }
-        if (annotation.serializable()) {
-            mockSettings.serializable();
-        }
-        if (annotation.stubOnly()) {
-            mockSettings.stubOnly();
-        }
-        if (annotation.lenient()) {
-            mockSettings.lenient();
-        }
-        if (annotation.strictness() != Mock.Strictness.TEST_LEVEL_DEFAULT) {
-            mockSettings.strictness(Strictness.valueOf(annotation.strictness().toString()));
-        }
-        if (!annotation.mockMaker().isEmpty()) {
-            mockSettings.mockMaker(annotation.mockMaker());
-        }
-        if (annotation.withoutAnnotations()) {
-            mockSettings.withoutAnnotations();
-        }
+        applyIf(annotation.serializable(), mockSettings::serializable);
+
+        applyIf(annotation.stubOnly(), mockSettings::stubOnly);
+
+        applyIf(annotation.lenient(), mockSettings::lenient);
+        applyIf(
+                annotation.strictness() != Mock.Strictness.TEST_LEVEL_DEFAULT,
+                () ->
+                        mockSettings.strictness(
+                                Strictness.valueOf(annotation.strictness().toString())));
+
+        applyIf(
+                !annotation.mockMaker().isEmpty(),
+                () -> mockSettings.mockMaker(annotation.mockMaker()));
+
+        applyIf(annotation.withoutAnnotations(), mockSettings::withoutAnnotations);
 
         mockSettings.genericTypeToMock(genericType.get());
 
         // see @Mock answer default value
         mockSettings.defaultAnswer(annotation.answer());
 
-        if (type == MockedStatic.class) {
+        if (type == MockedStatic.class) { // +1
             return Mockito.mockStatic(
                     inferParameterizedType(
                             genericType.get(), name, MockedStatic.class.getSimpleName()),
-                    mockSettings);
+                    mockSettings); // -1
         } else if (type == MockedConstruction.class) {
             return Mockito.mockConstruction(
                     inferParameterizedType(
                             genericType.get(), name, MockedConstruction.class.getSimpleName()),
-                    mockSettings);
+                    mockSettings); // -1
         } else {
-            return Mockito.mock(type, mockSettings);
+            return Mockito.mock(type, mockSettings); // -1
         }
+        // M = 2-3+2 = 1
     }
 
     static Class<?> inferParameterizedType(Type type, String name, String sort) {
@@ -109,5 +107,11 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
                         "@Mock " + sort + "<Sample>",
                         "",
                         "as the type parameter."));
+    }
+
+    private static void applyIf(boolean condition, Runnable action) {
+        if (condition) {
+            action.run();
+        }
     }
 }
