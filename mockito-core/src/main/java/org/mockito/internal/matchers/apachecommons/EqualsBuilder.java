@@ -226,19 +226,48 @@ class EqualsBuilder {
             boolean testTransients,
             Class<?> reflectUpToClass,
             String[] excludeFields) {
-        if (lhs == rhs) {
-            return true;
+        if (lhs == rhs) {   // +1
+            return true;    // -1
         }
-        if (lhs == null || rhs == null) {
-            return false;
+        if (lhs == null) {  // +1
+            return false;   // -1
+        }
+        if (rhs == null) { // +1
+            return false;   // -1
         }
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars,
         // then a subclass can test equals to a superclass.
+       
+        Class<?> testClass = determineTestClass(lhs, rhs);  // calls the new method in the refactoring
+        if (testClass == null) { // +1
+            return false;   // -1
+        } 
+            
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) { // +1
+            return false;   // -1
+        }
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { // +2
+            testClass = testClass.getSuperclass();
+            if (reflectionAppend(
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) { // +1
+                return false;   // -1
+            }
+        }
+        return equalsBuilder.isEquals();    // -1
+
+        // π = 8, s = 7
+        // M = π - s + 2 = 3
+    }
+
+
+    /** The extracted part of the method */
+    private static Class<?> determineTestClass(Object lhs, Object rhs) {
+        Class<?> testClass;
         Class<?> lhsClass = lhs.getClass();
         Class<?> rhsClass = rhs.getClass();
-        Class<?> testClass;
         if (lhsClass.isInstance(rhs)) {
             testClass = lhsClass;
             if (!rhsClass.isInstance(lhs)) {
@@ -253,21 +282,11 @@ class EqualsBuilder {
             }
         } else {
             // The two classes are not related.
-            return false;
+            return null;
         }
-        EqualsBuilder equalsBuilder = new EqualsBuilder();
-        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
-            return false;
-        }
-        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
-            testClass = testClass.getSuperclass();
-            if (reflectionAppend(
-                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
-                return false;
-            }
-        }
-        return equalsBuilder.isEquals();
+        return testClass;
     }
+    
 
     /**
      * <p>Appends the fields and values defined by the given object of the
