@@ -123,11 +123,11 @@ public static boolean reflectionEquals(
             boolean testTransients,
             Class<?> reflectUpToClass,
             String[] excludeFields) {
-        if (lhs == rhs) { # +1
-            return true; # -1
+        if (lhs == rhs) { // +1
+            return true; // -1
         }
-        if (lhs == null || rhs == null) { # +2
-            return false;   # -1
+        if (lhs == null || rhs == null) { // +2
+            return false;   // -1
         }
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
@@ -136,34 +136,34 @@ public static boolean reflectionEquals(
         Class<?> lhsClass = lhs.getClass();
         Class<?> rhsClass = rhs.getClass();
         Class<?> testClass;
-        if (lhsClass.isInstance(rhs)) {     # +1
+        if (lhsClass.isInstance(rhs)) {     // +1
             testClass = lhsClass;
-            if (!rhsClass.isInstance(lhs)) {    # +1
+            if (!rhsClass.isInstance(lhs)) {    // +1
                 // rhsClass is a subclass of lhsClass
                 testClass = rhsClass;
             }
-        } else if (rhsClass.isInstance(lhs)) {  # +1
+        } else if (rhsClass.isInstance(lhs)) {  // +1
             testClass = rhsClass;
-            if (!lhsClass.isInstance(rhs)) {    # +1
+            if (!lhsClass.isInstance(rhs)) {    // +1
                 // lhsClass is a subclass of rhsClass
                 testClass = lhsClass;
             }
         } else {
             // The two classes are not related.
-            return false;   # -1
+            return false;   // -1
         }
         EqualsBuilder equalsBuilder = new EqualsBuilder();
-        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {  # +1
-            return false;   # -1
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {  // +1
+            return false;   // -1
         }
-        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { # +2
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { // +2
             testClass = testClass.getSuperclass();
             if (reflectionAppend(
-                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {   # +1
-                return false;   # -1
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {   // +1
+                return false;   // -1
             }
         }
-        return equalsBuilder.isEquals();    # -1
+        return equalsBuilder.isEquals();    // -1
     }
     // π = 11, s = 6
     // M = π - s + 2 = 7
@@ -368,6 +368,12 @@ Carried out refactoring (optional, P+):
 
 git diff ...
 
+### Elias
+The plan for refactoring the reflectionEquals is to extract section of code that determines the common test class and put that in its own function. If the goal is to reduce CC count one could as well split if with || (OR) opperators into separate if statements. If I were to estimate the impact of executing this refactoring plan it would be lower the CC, and hopefully make it more readable. 
+
+The actual implementation can be found on this link:
+
+ 
 ## Coverage
 
 ### Tools
