@@ -42,7 +42,7 @@ All of the five functions are complex, but not necessary long, with the longest 
 The purpose for each function is explained below it.
 
 4. **Are exceptions taken into account in the given measurements?**
-We considered `throws` as exit points, but `catch` blocks not as a decision point, as declared in the lecture. This means that excpetion handling does not intorduce any additional decision points and don't increase the CC count. 
+We considered `throws` as exit points, but `catch` blocks not as a decision point, as declared in the lecture. This means that exception handling does not intorduce any additional decision points and don't increase the CC count. 
 Lizard does consider `catch` blocks as decision points, if we were to co the same in our manual counting, the comlexity count would increase. 
 
 
@@ -52,53 +52,64 @@ Comments regarding the documentation are below each of the functions.
 ### <u>Methods</u>:
 
 ### Jonatan:
-*equals@101-137@./mockito-core/src/main/java/org/mockito/internal/invocation/SerializableMethod.java*
-- CC reported by Lizard: 14
-- CC counted by hand: 4
+*processAnnotationForMock@33-81@./mockito-core/src/main/java/org/mockito/internal/configuration/MockAnnotationProcessor.java*
+- CC reported by Lizard: 11
+- CC counted by hand: 9
 ```java
-@Override
-public boolean equals(Object obj) {
-    if (this == obj) { // +1
-        return true; // -1
+public static Object processAnnotationForMock(
+        Mock annotation, Class<?> type, Supplier<Type> genericType, String name) {
+    MockSettings mockSettings = Mockito.withSettings();
+    if (annotation.extraInterfaces().length > 0) { // never null +1
+        mockSettings.extraInterfaces(annotation.extraInterfaces());
     }
-    if (obj == null) { // +1
-        return false; // -1
+    if ("".equals(annotation.name())) { // +1
+        mockSettings.name(name);
+    } else {
+        mockSettings.name(annotation.name());
     }
-    if (getClass() != obj.getClass()) { // +1
-        return false; // -1
+    if (annotation.serializable()) { // +1
+        mockSettings.serializable();
     }
-    SerializableMethod other = (SerializableMethod) obj;
-    if (declaringClass == null) { // +1
-        if (other.declaringClass != null) { // +1
-                return false; // -1
-        }
-    } else if (!declaringClass.equals(other.declaringClass)) { // +1
-        return false; // -1
+    if (annotation.stubOnly()) { // +1
+        mockSettings.stubOnly();
     }
-    if (methodName == null) { // +1
-        if (other.methodName != null) { // +1
-                return false; // -1
-        }
-    } else if (!methodName.equals(other.methodName)) { // +1
-        return false; // -1
+    if (annotation.lenient()) { // +1
+        mockSettings.lenient();
     }
-    if (!Arrays.equals(parameterTypes, other.parameterTypes)) { // +1
-        return false; // -1
+    if (annotation.strictness() != Mock.Strictness.TEST_LEVEL_DEFAULT) { // +1
+        mockSettings.strictness(Strictness.valueOf(annotation.strictness().toString()));
     }
-    if (returnType == null) { // +1
-        if (other.returnType != null) { // +1
-                return false; // -1
-        }
-    } else if (!returnType.equals(other.returnType)) { // +1
-        return false; // -1
+    if (!annotation.mockMaker().isEmpty()) { // +1
+        mockSettings.mockMaker(annotation.mockMaker());
     }
-    return true; // -1
-    // π = 13, s = 11
-    // M = π - s + 2 = 4
+    if (annotation.withoutAnnotations()) { // +1
+        mockSettings.withoutAnnotations();
+    }
+
+    mockSettings.genericTypeToMock(genericType.get());
+
+    // see @Mock answer default value
+    mockSettings.defaultAnswer(annotation.answer());
+
+    if (type == MockedStatic.class) { // +1
+        return Mockito.mockStatic(
+                inferParameterizedType(
+                        genericType.get(), name, MockedStatic.class.getSimpleName()),
+                mockSettings); // -1
+    } else if (type == MockedConstruction.class) { // +1
+        return Mockito.mockConstruction(
+                inferParameterizedType(
+                        genericType.get(), name, MockedConstruction.class.getSimpleName()),
+                mockSettings); // -1
+    } else {
+        return Mockito.mock(type, mockSettings); // -1
+    }
+    // π = 10, s = 3
+    // M = π - s + 2 = 9
 }
 ```
--  The purpose is overriding the equals function (which just compares object references) for the `SerializableMethod` class, in order to compare with custom logic.
-- The code is pretty self-explanatory and there is no need to document further the possible outcomes.
+- The purpose is managing the @Mock annotation, it sets settings depending on what was passed in the annotation and creates the correct Mock (static, constructors etc.).
+- The code could benefit from some extra comments, although it is written in a way that makes it relatively easy to understand. Perhaps it would be nice to explain the generics a bit more `genericTypeToMock`. 
 
 
 ### Elias
