@@ -371,7 +371,8 @@ git diff ...
 ### Elias
 The plan for refactoring the reflectionEquals is to extract section of code that determines the common test class and put that in its own function. If the goal is to reduce CC count one could as well split if with || (OR) opperators into separate if statements. If I were to estimate the impact of executing this refactoring plan it would be lower the CC, and hopefully make it more readable. 
 
-The actual implementation can be found on this link:
+The actual implementation can be found on this link: 
+https://github.com/daDevBoat/MockitoFork/commit/d4078c4d193115ceee5f02f2cace77eb0fb625a3
 
  
 ## Coverage
