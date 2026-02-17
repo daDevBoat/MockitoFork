@@ -380,6 +380,16 @@ To refactor the `processAnnotationForMock` function, I extracted the common them
 Implementation is here:
 https://github.com/daDevBoat/MockitoFork/commit/6a8a2257123bc656f6860c03a29ac8c1c8c11328
 
+
+### Jannis
+The `append` method consists of a first part that checks for flags, null value and if the class is an array. The second part consists of a row of `else if` statements that depending on the type, call a different append method. The plan to reduce CC is, to split the original method into two parts. The first part remained in the `append` method, while the second part was moved the `appendByType` method. The CC changed the following (original -> append & appendByType).
+- Lizard: 17 -> 9 & 9
+- By hand: 14 -> 7 & 9
+
+Implementation can be found here:
+https://github.com/daDevBoat/MockitoFork/commit/75f1d82b0965717a27f567667d331499c3e55530
+
+
 ## Coverage
 
 ### Tools
