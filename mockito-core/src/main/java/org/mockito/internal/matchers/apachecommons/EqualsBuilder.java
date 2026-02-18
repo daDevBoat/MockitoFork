@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
+import org.CoverageRecorder;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.MemberAccessor;
 
@@ -227,11 +228,15 @@ class EqualsBuilder {
             Class<?> reflectUpToClass,
             String[] excludeFields) {
         if (lhs == rhs) {
+            CoverageRecorder.mark(101);
             return true;
         }
+        CoverageRecorder.mark(102);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(103);
             return false;
         }
+        CoverageRecorder.mark(104);
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars,
@@ -240,32 +245,43 @@ class EqualsBuilder {
         Class<?> rhsClass = rhs.getClass();
         Class<?> testClass;
         if (lhsClass.isInstance(rhs)) {
+            CoverageRecorder.mark(105);
             testClass = lhsClass;
             if (!rhsClass.isInstance(lhs)) {
+                CoverageRecorder.mark(106);
                 // rhsClass is a subclass of lhsClass
                 testClass = rhsClass;
             }
         } else if (rhsClass.isInstance(lhs)) {
+            CoverageRecorder.mark(107);
             testClass = rhsClass;
             if (!lhsClass.isInstance(rhs)) {
+                CoverageRecorder.mark(108);
                 // lhsClass is a subclass of rhsClass
                 testClass = lhsClass;
             }
         } else {
+            CoverageRecorder.mark(109);
             // The two classes are not related.
             return false;
         }
+
         EqualsBuilder equalsBuilder = new EqualsBuilder();
         if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+            CoverageRecorder.mark(110);
             return false;
         }
+        CoverageRecorder.mark(111);
         while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+            CoverageRecorder.mark(112);
             testClass = testClass.getSuperclass();
             if (reflectionAppend(
                     lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+                CoverageRecorder.mark(113);
                 return false;
             }
         }
+        CoverageRecorder.mark(114);
         return equalsBuilder.isEquals();
     }
 
@@ -340,46 +356,65 @@ class EqualsBuilder {
      */
     public EqualsBuilder append(Object lhs, Object rhs) {
         if (!isEquals) {
+            CoverageRecorder.mark(301);
             return this;
         }
+        CoverageRecorder.mark(302);
         if (lhs == rhs) {
+            CoverageRecorder.mark(303);
             return this;
         }
+        CoverageRecorder.mark(304);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(305);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(306);
         Class<?> lhsClass = lhs.getClass();
         if (!lhsClass.isArray()) {
+            CoverageRecorder.mark(307);
             if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {
+                CoverageRecorder.mark(308);
                 isEquals = (((BigDecimal) lhs).compareTo((BigDecimal) rhs) == 0);
             } else {
+                CoverageRecorder.mark(309);
                 // The simple case, not an array, just test the element
                 isEquals = lhs.equals(rhs);
             }
         } else if (lhs.getClass() != rhs.getClass()) {
+            CoverageRecorder.mark(310);
             // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
             this.setEquals(false);
 
             // 'Switch' on type of array, to dispatch to the correct handler
             // This handles multi dimensional arrays of the same depth
         } else if (lhs instanceof long[]) {
+            CoverageRecorder.mark(311);
             append((long[]) lhs, (long[]) rhs);
         } else if (lhs instanceof int[]) {
+            CoverageRecorder.mark(312);
             append((int[]) lhs, (int[]) rhs);
         } else if (lhs instanceof short[]) {
+            CoverageRecorder.mark(313);
             append((short[]) lhs, (short[]) rhs);
         } else if (lhs instanceof char[]) {
+            CoverageRecorder.mark(314);
             append((char[]) lhs, (char[]) rhs);
         } else if (lhs instanceof byte[]) {
+            CoverageRecorder.mark(315);
             append((byte[]) lhs, (byte[]) rhs);
         } else if (lhs instanceof double[]) {
+            CoverageRecorder.mark(316);
             append((double[]) lhs, (double[]) rhs);
         } else if (lhs instanceof float[]) {
+            CoverageRecorder.mark(317);
             append((float[]) lhs, (float[]) rhs);
         } else if (lhs instanceof boolean[]) {
+            CoverageRecorder.mark(318);
             append((boolean[]) lhs, (boolean[]) rhs);
         } else {
+            CoverageRecorder.mark(319);
             // Not an array of primitives
             append((Object[]) lhs, (Object[]) rhs);
         }
