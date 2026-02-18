@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +79,7 @@ public class CoverageRecorder {
             System.out.println("------------------------------------");
             System.out.println("HITS FOR PREFIX: " + prefix);
 
-            List<Integer> hitsIDS = prefixCounter.getOrDefault(prefix, List.of());
+            List<Integer> hitsIDS = prefixCounter.getOrDefault(prefix, Collections.emptyList());
             int covered = hitsIDS.size();
             int total = totalCounter.get(prefix);
 
