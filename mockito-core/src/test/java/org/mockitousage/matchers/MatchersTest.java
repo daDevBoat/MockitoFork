@@ -412,7 +412,7 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void array_equals_matches_should_return_false_for_incompatible_primitive_arrays() {
-        /* Contract: matches(Object) must return false when wanted and actual are primitive arrays of different types, 
+        /* Contract: matches(Object) must return false when wanted and actual are primitive arrays of different types,
         for example: int[] vs long[], even if numeric values are equivalent */
         ArrayEquals matcher = new ArrayEquals(new int[] {1, 2});
         assertFalse(matcher.matches(new long[] {1L, 2L}));
