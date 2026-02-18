@@ -25,6 +25,7 @@ import net.bytebuddy.utility.JavaConstant;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.bytebuddy.sample.DifferentPackage;
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -525,6 +526,22 @@ public class InlineDelegateByteBuddyMockMakerTest
         // then
         assertThat(mockMaker.getHandler(proxy1)).isEqualTo(DisabledMockHandler.HANDLER);
         assertThat(mockMaker.getHandler(proxy2)).isEqualTo(DisabledMockHandler.HANDLER);
+    }
+
+    @Test
+    public void should_throw_configuration_exception_for_null_spy_instance() {
+        //Sets up a minimal mock configuration using Object.class
+        MockCreationSettings<Object> settings = settingsFor(Object.class);
+        MockHandlerImpl<Object> handler = new MockHandlerImpl<Object>(settings);
+
+        //The spy instance is null so a MockitoConfigurationException should be thrown
+        MockitoConfigurationException exception =
+                assertThrows(
+                        MockitoConfigurationException.class,
+                        () -> mockMaker.createSpy(settings, handler, null));
+
+        //Verfies that the exception message is as expected 
+        assertThat(exception.getMessage()).contains("Spy instance must not be null");
     }
 
     protected static <T> MockCreationSettings<T> settingsFor(
