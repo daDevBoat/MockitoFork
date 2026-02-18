@@ -431,7 +431,7 @@ gather coverage measurements.
 [Own coverage tool](https://github.com/daDevBoat/MockitoFork/blob/code-coverage-tool/mockito-core/src/main/java/org/CoverageRecorder.java)
 
 - Arnau:  [matches() function](https://github.com/daDevBoat/MockitoFork/commit/62dc3981f76f53a9041b012a11aba6078093b2f6)
-- Elias
+- Elias:   [reflectionEquals()](https://github.com/daDevBoat/MockitoFork/commit/4f98296824128b2cc12db14c66875086df066c0d)
 - Jannis: [append](https://github.com/daDevBoat/MockitoFork/commit/b4f5e7f5ec69eca6fa0f0e3c93387bf6c9b701ab)
 - Jonatan [processAnnotationForMock](https://github.com/daDevBoat/MockitoFork/commit/ff57751306c2bbf1941d3203d5a9c27c05ea27f2#diff-04ea5ad3f5c1df787656eb2cd92305a86b2e48bf99455b9fb14260ee4a6a6424)
 - Alexander
@@ -518,6 +518,7 @@ Commit of the 4 tests, including coverage before and after as a comment on the c
 4. TR: If the constructor of a class is mocked, the returned mock is of type MockedConstruction and any calls to the constructors are mocked as expected.
 
 ### Elias 
+Commit of the 6 (2 + 4) test for reflectEquals and append(int[], int[]), including coverage before and after: [GitHub](https://github.com/daDevBoat/MockitoFork/commit/d461ef64ba056126e9274abb53a4b0bea8ce272a)
 
 ### Alexander
 
