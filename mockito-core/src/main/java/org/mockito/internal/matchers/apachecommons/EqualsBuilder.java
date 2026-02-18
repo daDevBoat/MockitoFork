@@ -672,21 +672,31 @@ class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(char[] lhs, char[] rhs) {
+        // Branch Marks start at 320
         if (!isEquals) {
+            CoverageRecorder.mark(320);
             return this;
         }
+        CoverageRecorder.mark(321);
         if (lhs == rhs) {
+            CoverageRecorder.mark(322);
             return this;
         }
+        CoverageRecorder.mark(323);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(324);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(325);
         if (lhs.length != rhs.length) {
             this.setEquals(false);
+            CoverageRecorder.mark(326);
             return this;
         }
+        CoverageRecorder.mark(327);
         for (int i = 0; i < lhs.length && isEquals; ++i) {
+            CoverageRecorder.mark(328);
             append(lhs[i], rhs[i]);
         }
         return this;
@@ -703,21 +713,31 @@ class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(byte[] lhs, byte[] rhs) {
+        // Branch marks start at 230
         if (!isEquals) {
+            CoverageRecorder.mark(330);
             return this;
         }
+        CoverageRecorder.mark(331);
         if (lhs == rhs) {
+            CoverageRecorder.mark(332);
             return this;
         }
+        CoverageRecorder.mark(333);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(334);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(335);
         if (lhs.length != rhs.length) {
+            CoverageRecorder.mark(336);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(337);
         for (int i = 0; i < lhs.length && isEquals; ++i) {
+            CoverageRecorder.mark(338);
             append(lhs[i], rhs[i]);
         }
         return this;

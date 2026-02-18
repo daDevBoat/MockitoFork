@@ -568,6 +568,16 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
+
+        // Contract: If the length of the two objects is different, the isEquals flag is false
+        char[] obj3 = new char[3];
+        obj3[0] = 5;
+        obj3[1] = 6;
+        obj3[2] = 2;
+        char[] obj4 = new char[2];
+        obj4[0] = 5;
+        obj4[1] = 6;
+        assertFalse(new EqualsBuilder().append(obj3, obj4).isEquals());
     }
 
     @Test
@@ -587,6 +597,16 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
+
+        // Contract: If the length of the two objects is different, the isEquals flag is false
+        byte[] obj3 = new byte[3];
+        obj3[0] = 5;
+        obj3[1] = 6;
+        obj3[2] = 2;
+        byte[] obj4 = new byte[2];
+        obj4[0] = 5;
+        obj4[1] = 6;
+        assertFalse(new EqualsBuilder().append(obj3, obj4).isEquals());
     }
 
     @Test
