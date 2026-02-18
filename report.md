@@ -455,6 +455,28 @@ For the types of branches we explicitly decided to measure (i.e., `if-else` stat
 
 ## Coverage improvement
 
+### **Arnau** - matches(Object)
+
+#### Test Requirements for improving coverage
+
+- **Test requirement 1:** matches(Object) must return false when wanted and actual are primitive arrays of different types, for example: int[] vs long[], even if numeric values are equivalent.
+
+- **Test requirement 2:** matches(Object) must enter the branch when wanted != null and actual == null, and must return false via super.matches(actual).
+
+**The comparison of the report of the old coverage and the new one, is in the comment section of the commit linnk shared**
+
+Report of new coverage (for P): [tests_n1_n2](https://github.com/daDevBoat/MockitoFork/commit/542ef4482cf9fdc4a90cdeb90e5809932c06c1bd)
+
+Report of new coverage (for P+): [tests_n3_n4]()
+
+### **Jannis** - 
+
+### **Jonatan** -
+
+### **Elias** - 
+
+### **Alexander** -
+
 Show the comments that describe the requirements for the coverage.
 
 Report of old coverage: [link]
