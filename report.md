@@ -1,9 +1,5 @@
 # Report for assignment 3
 
-This is a template for your report. You are free to modify it as needed.
-It is not required to use markdown for your report either, but the report
-has to be delivered in a standard, cross-platform format.
-
 ## Project
 
 Name: **mockito**
@@ -434,7 +430,11 @@ gather coverage measurements.
 
 [Own coverage tool](https://github.com/daDevBoat/MockitoFork/blob/code-coverage-tool/mockito-core/src/main/java/org/CoverageRecorder.java)
 
-[matches() function](https://github.com/daDevBoat/MockitoFork/commit/62dc3981f76f53a9041b012a11aba6078093b2f6)
+- Arnau:  [matches() function](https://github.com/daDevBoat/MockitoFork/commit/62dc3981f76f53a9041b012a11aba6078093b2f6)
+- Elias
+- Jannis: [append](https://github.com/daDevBoat/MockitoFork/commit/b4f5e7f5ec69eca6fa0f0e3c93387bf6c9b701ab)
+- Jonatan
+- Alexander
 
 ### Evaluation
 
