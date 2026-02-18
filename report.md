@@ -378,13 +378,38 @@ public EqualsBuilder append(Object lhs, Object rhs) {
 
 ## Refactoring
 
-Plan for refactoring complex code:
+### Elias
+The plan for refactoring the reflectionEquals is to extract section of code that determines the common test class and put that in its own function. If the goal is to reduce CC count one could as well split if with || (OR) opperators into separate if statements. If I were to estimate the impact of executing this refactoring plan it would be lower the CC, and hopefully make it more readable. 
 
-Estimated impact of refactoring (lower CC, but other drawbacks?).
+The actual implementation can be found on this [link](https://github.com/daDevBoat/MockitoFork/commit/d4078c4d193115ceee5f02f2cace77eb0fb625a3)
 
-Carried out refactoring (optional, P+):
+### Jonatan
+To refactor the `processAnnotationForMock` function, I extracted the common theme of having an if statement and then running one single line of code into a function that was called instead, does precisely that. This reduces the amount of `if`-statements drastically, and thus also the CC count, which was reduced from 11 in lizard to 4 (manual count was 9->1).
 
-git diff ...
+Implementation is [here](https://github.com/daDevBoat/MockitoFork/commit/6a8a2257123bc656f6860c03a29ac8c1c8c11328)
+
+
+### Jannis
+The `append` method consists of a first part that checks for flags, null value and if the class is an array. The second part consists of a row of `else if` statements that depending on the type, call a different append method. The plan to reduce CC is, to split the original method into two parts. The first part remained in the `append` method, while the second part was moved the `appendByType` method. The CC changed the following (original -> append & appendByType).
+- Lizard: 17 -> 9 & 9
+- By hand: 14 -> 7 & 9
+
+Implementation can be found [here](https://github.com/daDevBoat/MockitoFork/commit/75f1d82b0965717a27f567667d331499c3e55530)
+
+### Arnau
+
+For the `matches(Object)` function, the cyclomatic complexity of `11` in the original `matches(Object)` function is not truly necessary. The complexity arises from having 10 consecutive `if/else if` branches, all following the exact same pattern: first, check the type of both `wanted` and `actual`, then delegate to `Array.equals()`.
+
+It is possible to split the code into two smaller units to reduce complexity, by following the following refactoring plan:
+
+The plan consists of applying an `Extract Method` refactoring pattern, by extracting the primitive array comparison logic into a dedicated helper method named `matchesPrimitiveArray(Object wanted, Object actual)`.
+
+**Following and implementing the refactoring plan:**
+- By hand, the cyclomatic complexity is reduced from `11` to `3`.
+- With lizard, the cyclomatic complexity is reduced from `21` to `6`.
+
+**Implementation of the refactoring can be found here:**
+[ExtractMethod_refactor_matches](https://github.com/daDevBoat/MockitoFork/commit/2a4fcf36649b83f2324935883e3489de7e018a77)
 
 ## Coverage
 
