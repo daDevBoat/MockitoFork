@@ -154,6 +154,12 @@ public class EqualsBuilderTest extends TestBase {
         }
     }
 
+    static class NoFieldTestObject {
+        public NoFieldTestObject() {
+
+        }
+    }
+
     @Test
     public void testReflectionEquals() {
         TestObject o1 = new TestObject(4);
@@ -343,6 +349,17 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!EqualsBuilder.reflectionEquals(null, to2, testTransients));
         assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null, testTransients));
     }
+
+    @Test
+    public void testReflectionEqualsReflectionAppendFalse() {
+        TestObject o1 = new TestObject(4);
+        NoFieldTestObject o2 = new NoFieldTestObject();
+
+        assertTrue(!EqualsBuilder.reflectionEquals(o1, o2));
+
+
+    }
+
 
     @Test
     public void testSuper() {
