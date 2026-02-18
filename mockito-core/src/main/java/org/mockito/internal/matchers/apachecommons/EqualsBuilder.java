@@ -228,11 +228,15 @@ class EqualsBuilder {
             Class<?> reflectUpToClass,
             String[] excludeFields) {
         if (lhs == rhs) {
+            CoverageRecorder.mark(101);
             return true;
         }
+        CoverageRecorder.mark(102);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(103);
             return false;
         }
+        CoverageRecorder.mark(104);
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars,
@@ -241,32 +245,43 @@ class EqualsBuilder {
         Class<?> rhsClass = rhs.getClass();
         Class<?> testClass;
         if (lhsClass.isInstance(rhs)) {
+            CoverageRecorder.mark(105);
             testClass = lhsClass;
             if (!rhsClass.isInstance(lhs)) {
+                CoverageRecorder.mark(106);
                 // rhsClass is a subclass of lhsClass
                 testClass = rhsClass;
             }
         } else if (rhsClass.isInstance(lhs)) {
+            CoverageRecorder.mark(107);
             testClass = rhsClass;
             if (!lhsClass.isInstance(rhs)) {
+                CoverageRecorder.mark(108);
                 // lhsClass is a subclass of rhsClass
                 testClass = lhsClass;
             }
         } else {
+            CoverageRecorder.mark(109);
             // The two classes are not related.
             return false;
         }
+
         EqualsBuilder equalsBuilder = new EqualsBuilder();
         if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+            CoverageRecorder.mark(110);
             return false;
         }
+        CoverageRecorder.mark(111);
         while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+            CoverageRecorder.mark(112);
             testClass = testClass.getSuperclass();
             if (reflectionAppend(
                     lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+                CoverageRecorder.mark(113);
                 return false;
             }
         }
+        CoverageRecorder.mark(114);
         return equalsBuilder.isEquals();
     }
 

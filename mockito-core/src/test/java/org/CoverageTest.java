@@ -22,7 +22,8 @@ public class CoverageTest {
 
     @BeforeClass
     public static void beforeAll() {
-        // CoverageRecorder.register(101, 102, 103, 104, 105, 106);
+        CoverageRecorder.register(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+             112, 113, 114);
         CoverageRecorder.register(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311,
             312, 313, 314, 315, 316, 317, 318, 319);
         CoverageRecorder.register(501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511);
