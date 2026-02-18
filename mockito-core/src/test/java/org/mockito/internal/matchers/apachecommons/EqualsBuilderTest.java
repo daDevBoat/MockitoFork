@@ -471,7 +471,6 @@ public class EqualsBuilderTest extends TestBase {
         assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
-
     @Test
     public void testAccessors() {
         EqualsBuilder equalsBuilder = new EqualsBuilder();
@@ -585,8 +584,8 @@ public class EqualsBuilderTest extends TestBase {
         obj2[0] = 5;
         obj2[1] = 6;
         /*Contract: If the two char objects are the same type and length,
-        * the isEquals flag is true
-        */
+         * the isEquals flag is true
+         */
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
@@ -619,9 +618,9 @@ public class EqualsBuilderTest extends TestBase {
         obj2[0] = 5;
         obj2[1] = 6;
         /*
-        * Contract: If the two char objects are the same type and length, the isEquals
-        * flag is true
-        */
+         * Contract: If the two char objects are the same type and length, the isEquals
+         * flag is true
+         */
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
