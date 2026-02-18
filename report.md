@@ -520,6 +520,13 @@ Commit of the 4 tests, including coverage before and after as a comment on the c
 ### Elias 
 Commit of the 6 (2 + 4) test for reflectEquals and append(int[], int[]), including coverage before and after: [GitHub](https://github.com/daDevBoat/MockitoFork/commit/d461ef64ba056126e9274abb53a4b0bea8ce272a)
 
+1. TR: If two objects are identical instances of the same class with the same field values, reflectionEquals returns true; if at least one field value differs, it returns false.
+2. TR: If reflectUpToClass is the same as the runtime class of the compared objects, the while loop condition (testClass != reflectUpToClass) evaluates to false and the loop does not execute.
+3. TR: If two int[] arrays passed to append(int[], int[]) have different lengths, the method returns the same EqualsBuilder instance without marking the arrays as equal.
+4. TR: If append(int[], int[]) is invoked when the builder is already in a non-equal state or when one of the arrays is null, the method returns the same EqualsBuilder instance without changing the equality result.
+5. TR: If two int[] arrays passed to append(int[], int[]) contain different element values, the method returns the same EqualsBuilder instance and the equality state reflects that the arrays are not equal.
+6. TR: If one of the int[] arrays passed to append(int[], int[]) is null, the method returns the same EqualsBuilder instance and treats the arrays as not equal.
+
 ### Alexander
 
 
