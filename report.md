@@ -390,10 +390,17 @@ git diff ...
 
 ### Tools
 
-Document your experience in using a "new"/different coverage tool.
+#### Document your experience in using a "new" different coverage tool.
 
-How well was the tool documented? Was it possible/easy/difficult to
-integrate it with your build environment?
+We used `JaCoCo` as the automated coverage tool. In the Mockito repository, JaCoCo is already integrated into the Gradle build configuration, so no additional setup or installation was required.
+
+Our experience was very positive. It was straightforward to generate a coverage report by runnig `./gradlew clean test jacocoTestReport`. 
+
+We found that running `clean` before executing the tests ensured that the coverage report was properly updated.
+
+After the execution, the report was generated automatically. By opening the `index.html` file located a the following path: `build/reports/jacoco/test/html/`, we were able to navigate through the project structure and inspect the specific functions we had instrumented.
+
+The report clearly highlights coverage using `green` for fully covered code, `yellow` for partially covered branches, and `red` for uncovered code.
 
 ### Your own coverage tool
 
@@ -402,13 +409,7 @@ gather coverage measurements.
 
 [Own coverage tool](https://github.com/daDevBoat/MockitoFork/blob/code-coverage-tool/mockito-core/src/main/java/org/CoverageRecorder.java)
 
-The patch is probably too long to be copied here, so please add
-the git command that is used to obtain the patch instead:
-
-git diff ...
-
-What kinds of constructs does your tool support, and how accurate is
-its output?
+[matches() function](https://github.com/daDevBoat/MockitoFork/commit/62dc3981f76f53a9041b012a11aba6078093b2f6)
 
 ### Evaluation
 
