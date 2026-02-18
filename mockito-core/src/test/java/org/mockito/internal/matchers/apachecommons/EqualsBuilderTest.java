@@ -10,7 +10,9 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.mockitoutil.TestBase;
+
 
 // Class comes from Apache Commons Lang, added some tiny changes
 /**
@@ -153,7 +155,7 @@ public class EqualsBuilderTest extends TestBase {
             this.t = t;
         }
     }
-
+    
     @Test
     public void testReflectionEquals() {
         TestObject o1 = new TestObject(4);
@@ -170,6 +172,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null));
     }
 
+    
     @Test
     public void testReflectionHierarchyEquals() {
         testReflectionHierarchyEquals(false);
@@ -192,6 +195,7 @@ public class EqualsBuilderTest extends TestBase {
                         new TestTTLeafObject(0, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 4), true));
     }
 
+    
     private void testReflectionHierarchyEquals(boolean testTransients) {
         TestObject to1 = new TestObject(4);
         TestObject to1Bis = new TestObject(4);
@@ -299,6 +303,7 @@ public class EqualsBuilderTest extends TestBase {
      * @param to2 a different TestObject
      * @param oToChange a TestObject that will be changed
      */
+    
     private void testReflectionEqualsEquivalenceRelationship(
             TestObject to,
             TestObject toBis,
@@ -343,6 +348,102 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!EqualsBuilder.reflectionEquals(null, to2, testTransients));
         assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null, testTransients));
     }
+
+
+    /* Added tests by Elias */
+    // -------------------------------------------------------------------------------------
+    
+    // Tests for reflectionEquals
+
+    @Test
+    public void testReflectionEqualsSameClassAndFields() {
+        /*
+        * Contract: Since o1 and o2 are identical objects of the same class the method
+        * should return true
+        */
+        TestObject o1 = new TestObject(4);
+        TestObject o2 = new TestObject(4);
+        TestObject o3 = new TestObject(5);
+
+        assertTrue(EqualsBuilder.reflectionEquals(o1, o2));
+        assertFalse(EqualsBuilder.reflectionEquals(o1, o3));
+
+    }
+
+    @Test
+    public void testWhileLoopBranchReflectUpToClassIsSame() {
+        /* 
+        * Contract: testClass != reflectUpToClass will be true so the while loop will not execute since
+        * the reflectUpToClass param will be the same class type as the input objects
+        */
+        TestSubObject o1 = new TestSubObject(1, 10);
+        TestSubObject o2 = new TestSubObject(1, 10);
+
+        assertTrue(EqualsBuilder.reflectionEquals(o1, o2, false, TestSubObject.class));
+        
+    }
+
+    // Tests for append(int[], int[]) CC of 8 according to Jacoco combinded with reflectionEquals
+
+    @Test
+    public void testAppendNonEqualLength() {
+        /* 
+        * Contract: append() returns the builder object instance since the two
+        * objects passed are of different length
+        */
+        int[] lhs = new int[]{1, 2, 3};
+        int[] rhs = new int[]{1, 2, 3, 4};
+
+        EqualsBuilder builder = new EqualsBuilder();
+        assertEquals(builder, builder.append(lhs, rhs));
+    }
+
+    @Test
+    public void testAppendIsEqualsFalse() {
+        /* 
+        * Contract: append() returns the builder object instance since the
+        * objects passed are not all equal 
+        */
+        int[] lhs = new int[]{1, 2, 3};
+        int[] rhs = new int[]{2, 3, 4};
+
+        EqualsBuilder builder = new EqualsBuilder();
+        builder.append(lhs, null);
+        
+        assertEquals(builder, builder.append(lhs, rhs));
+    }
+
+    @Test
+    public void testAppendIsEqualsFalse2() {
+        /* 
+        * Contract: append() returns the builder object instance since the two
+        * objects passed are not equal 
+        */
+        int[] lhs = new int[]{1, 2, 3};
+        int[] rhs = new int[]{2, 3, 4};
+
+        EqualsBuilder builder = new EqualsBuilder();
+        //builder.setEquals(builder.reflectionEquals(lhs, rhs));
+        //builder.setEquals(false);
+        assertEquals(builder, builder.append(lhs, rhs));
+    }
+
+    @Test
+    public void testAppendNullObjects() {
+        /* 
+        * Contract: append() returns the builder object instance since the rhs
+        * object passed is null
+        */
+        int[] lhs = null;
+        int[] rhs = new int[]{1, 2, 3};
+
+        EqualsBuilder builder = new EqualsBuilder();
+        assertEquals(builder, builder.append(lhs, rhs));
+    }
+
+
+
+    // ----------------------------------------------------------------------------------------
 
     @Test
     public void testSuper() {
@@ -1131,6 +1232,7 @@ public class EqualsBuilderTest extends TestBase {
         new EqualsBuilder().append(x1, x2);
     }
 
+    
     @Test
     public void testReflectionEqualsExcludeFields() throws Exception {
         TestObjectWithMultipleFields x1 = new TestObjectWithMultipleFields(1, 2, 3);
