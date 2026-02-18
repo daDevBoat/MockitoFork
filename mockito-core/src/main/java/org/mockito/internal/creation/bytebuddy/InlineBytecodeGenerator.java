@@ -24,6 +24,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
+
+import org.CoverageRecorder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.creation.bytebuddy.access.MockMethodInterceptor;
@@ -273,16 +275,23 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         Set<Class<?>> targets = new HashSet<Class<?>>();
 
         try {
+            CoverageRecorder.mark(401);
             for (Class<?> type : types) {
+                CoverageRecorder.mark(402);
                 if (flat) {
+                    CoverageRecorder.mark(403);
                     if (!mocked.contains(type) && flatMocked.add(type)) {
+                        CoverageRecorder.mark(404);
                         assureInitialization(type);
                         targets.add(type);
                     }
                 } else {
+                    CoverageRecorder.mark(405);
                     do {
                         if (mocked.add(type)) {
+                            CoverageRecorder.mark(406);
                             if (!flatMocked.remove(type)) {
+                                CoverageRecorder.mark(407);
                                 assureInitialization(type);
                                 targets.add(type);
                             }
@@ -293,7 +302,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 }
             }
         } catch (Throwable t) {
+            CoverageRecorder.mark(408);
             for (Class<?> target : targets) {
+                CoverageRecorder.mark(409);
                 mocked.remove(target);
                 flatMocked.remove(target);
             }
@@ -301,11 +312,14 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         }
 
         if (!targets.isEmpty()) {
+            CoverageRecorder.mark(410);
             try {
+                CoverageRecorder.mark(411);
                 assureCanReadMockito(targets);
                 instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
                 Throwable throwable = lastException;
                 if (throwable != null) {
+                    CoverageRecorder.mark(412);
                     throw new IllegalStateException(
                             join(
                                     "Byte Buddy could not instrument all classes within the mock's type hierarchy",
@@ -316,7 +330,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             throwable);
                 }
             } catch (Exception exception) {
+                CoverageRecorder.mark(413);
                 for (Class<?> failed : targets) {
+                    CoverageRecorder.mark(414);
                     mocked.remove(failed);
                     flatMocked.remove(failed);
                 }
