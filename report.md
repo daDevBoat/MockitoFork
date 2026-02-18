@@ -513,14 +513,12 @@ Commit of the 4 test, including coverage before and after: [GitHub](https://gith
 
 
 ## Self-assessment: Way of working
+When comparing our way-of-working to the Essence checklist, we are in state `In-Place`. Looking at the checklist, we fulfill all the points prior to the state `Working-well`. 
 
-Current state according to the Essence standard: ...
+In the first assignment, we evaluated ourselves to be in the state `In-Use`, so we have improved one state so far. The way of working became easier to use and supported us more and more throughout the course. Structured commits, organized issues, and meaningful commit messages enable us to work more effectively.
 
-Was the self-assessment unanimous? Any doubts about certain items?
+To continue in the next state, `Working-well`, we are missing the continuous tuning of our way of working and our tools. We could also improve in how naturally we use and apply our way-of-working. This was also the only point of discussion, as for some of us it feels more natural than for others.
 
-How have you improved so far?
-
-Where is potential for improvement?
 
 ## Overall experience
 
