@@ -389,6 +389,21 @@ The `append` method consists of a first part that checks for flags, null value a
 Implementation can be found here:
 https://github.com/daDevBoat/MockitoFork/commit/75f1d82b0965717a27f567667d331499c3e55530
 
+### Arnau
+
+For the `matches(Object)` function, the cyclomatic complexity of `11` in the original `matches(Object)` function is not truly necessary. The complexity arises from having 10 consecutive `if/else if` branches, all following the exact same pattern: first, check the type of both `wanted` and `actual`, then delegate to `Array.equals()`.
+
+It is possible to split the code into two smaller units to reduce complexity, by following the following refactoring plan:
+
+The plan consists of applying an `Extract Method` refactoring pattern, by extracting the primitive array comparison logic into a dedicated helper method named `matchesPrimitiveArray(Object wanted, Object actual)`.
+
+**Following and implementing the refactoring plan:**
+- By hand, the cyclomatic complexity is reduced from `11` to `3`.
+- With lizard, the cyclomatic complexity is reduced from `21` to `6`.
+
+**Implementation of the refactoring can be found here:**
+[ExtractMethod_refactor_matches](https://github.com/daDevBoat/MockitoFork/commit/2a4fcf36649b83f2324935883e3489de7e018a77)
+
 
 ## Coverage
 
