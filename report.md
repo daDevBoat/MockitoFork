@@ -454,40 +454,38 @@ For the types of branches we explicitly decided to measure (i.e., `if-else` stat
 `JaCoCo` provides a more precise and complete branch coverage measurment as itperforms bytecode-level instrumentation and therefore detects additional branches that we do not take into account. So our tool is consistent within the scope we have defined, but it does not capture all the possible branch outcomes that `JaCoCo` reports.
 
 ## Coverage improvement
+For every test introduced we mention the TR that needed to be fullfilled to improve branch coverage.
 
-### **Arnau** - matches(Object)
+A more elaborate report on the tests can be found in the `linked commit` and the `comment` attached to it. Changes in the coverage can also be found in the attached comment.
 
-#### Test Requirements for improving coverage
-
-- **Test requirement 1:** matches(Object) must return false when wanted and actual are primitive arrays of different types, for example: int[] vs long[], even if numeric values are equivalent.
-
-- **Test requirement 2:** matches(Object) must enter the branch when wanted != null and actual == null, and must return false via super.matches(actual).
-
-**The comparison of the report of the old coverage and the new one, is in the comment section of the commit linnk shared**
+### Arnau - matches(Object)
 
 Report of new coverage (for P): [tests_n1_n2](https://github.com/daDevBoat/MockitoFork/commit/542ef4482cf9fdc4a90cdeb90e5809932c06c1bd)
 
 Report of new coverage (for P+): [tests_n3_n4]()
 
-### **Jannis** - 
+1) TR1: matches(Object) must return false when wanted and actual are primitive arrays of different types, for example: int[] vs long[], even if numeric values are equivalent.
 
-### **Jonatan** -
+2) TR2: matches(Object) must enter the branch when wanted != null and actual == null, and must return false via super.matches(actual).
 
-### **Elias** - 
+### Jannis
+Commit of the 4 test, including coverage before and after: [GitHub](https://github.com/daDevBoat/MockitoFork/commit/7821a71ebc1eaf9370126713b7a69e5a6ff650ad)
 
-### **Alexander** -
 
-Show the comments that describe the requirements for the coverage.
+1) TR: The append(object, object) method sets the `isEquals` flag to false if only one of the two objects is of type BigDecimal 
 
-Report of old coverage: [link]
+2) TR: The append(object, object) method sets the `isEquals` flag to false if both objects are of type BigDecimal, but have different values.
 
-Report of new coverage: [link]
+3) TR: The append(char [], char[]) method sets the `isEquals` flag to false if both objects are of type char but have different lengths.
 
-Test cases added:
+4) TR: The append(char [], char[]) method sets the `isEquals` flag to false if both objects are of type char but have different lengths.
 
-git diff ...
+### Jonatan
 
-Number of test cases added: two per team member (P) or at least four (P+).
+### Elias 
+
+### Alexander
+
 
 ## Self-assessment: Way of working
 
