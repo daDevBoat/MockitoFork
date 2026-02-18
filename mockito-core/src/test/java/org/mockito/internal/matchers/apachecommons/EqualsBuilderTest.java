@@ -448,6 +448,31 @@ public class EqualsBuilderTest extends TestBase {
     }
 
     @Test
+    /** Test 1:
+     * Contract: EqualsBuilder.append sets the isEquals flag to false when one of the objects is
+     * a BigDecimal and the other one is an Int.
+     */
+    public void testBigDecimalComparedToInteger() {
+        BigDecimal o1 = new BigDecimal("2.0");
+        Integer o2 = 2;
+        assertFalse(new EqualsBuilder().append(o2, o1).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
+    }
+
+    @Test
+    /** Test 2:
+     * Contract: EqualsBuilder.append sets the isEquals flag to false when both objects
+     * are BigDecimals but have diffrent values.
+     */
+    public void testDifferentBigDecimal() {
+        BigDecimal o1 = new BigDecimal("2.0");
+        BigDecimal o2 = new BigDecimal("3.0");
+        assertFalse(new EqualsBuilder().append(o2, o1).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
+    }
+
+
+    @Test
     public void testAccessors() {
         EqualsBuilder equalsBuilder = new EqualsBuilder();
         assertTrue(equalsBuilder.isEquals());
@@ -559,15 +584,30 @@ public class EqualsBuilderTest extends TestBase {
         char[] obj2 = new char[2];
         obj2[0] = 5;
         obj2[1] = 6;
+        /*Contract: If the two char objects are the same type and length,
+        * the isEquals flag is true
+        */
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
+        // Contract: If one of the objects is null, the isEquals flag is false
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
+        // Contract: If both of the objects are null, the isEquals flag is true
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
+
+        // Contract: If the length of the two objects is different, the isEquals flag is false
+        char[] obj3 = new char[3];
+        obj3[0] = 5;
+        obj3[1] = 6;
+        obj3[2] = 2;
+        char[] obj4 = new char[2];
+        obj4[0] = 5;
+        obj4[1] = 6;
+        assertFalse(new EqualsBuilder().append(obj3, obj4).isEquals());
     }
 
     @Test
@@ -578,15 +618,31 @@ public class EqualsBuilderTest extends TestBase {
         byte[] obj2 = new byte[2];
         obj2[0] = 5;
         obj2[1] = 6;
+        /*
+        * Contract: If the two char objects are the same type and length, the isEquals
+        * flag is true
+        */
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
 
+        // Contract: If both of the objects are null, the isEquals flag is true
         obj2 = null;
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        // Contract: If both of the objects are null, the isEquals flag is true
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
+
+        // Contract: If the length of the two objects is different, the isEquals flag is false
+        byte[] obj3 = new byte[3];
+        obj3[0] = 5;
+        obj3[1] = 6;
+        obj3[2] = 2;
+        byte[] obj4 = new byte[2];
+        obj4[0] = 5;
+        obj4[1] = 6;
+        assertFalse(new EqualsBuilder().append(obj3, obj4).isEquals());
     }
 
     @Test
