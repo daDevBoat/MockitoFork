@@ -6,15 +6,33 @@ has to be delivered in a standard, cross-platform format.
 
 ## Project
 
-Name: 
+Name: **mockito**
 
-URL:
+URL: https://github.com/mockito/mockito
 
-One or two sentences describing it
+
+Mockito is an open-source Java mocking framework that allows developers to create mock objects and verify interactions in unit tests, improving test readability and maintainability. [more info](https://site.mockito.org/)
+
 
 ## Onboarding experience
 
-Did it build and run as documented?
+### Did it build and run as documented?
+
+Mockito is the project we have chosen to work on.
+
+Initially, we explored several projects. Specifically, we looked for projects that were mainly implemented in java, included an automated tool for running tests and contained functions with relatively high complexity, and a clear documentation on how to compile and run the project. 
+
+The projects we looked before deciding to choose Mockito, lacked one or more of this criteria. In addition, we considered important that the project had well-documented contribution guidelines and a sufficient number of open issue to work on in the next assigment.
+
+For mockito, building the project was not entirely straightforward at the beginning, because all the team members have the most recent version of Java, and in order to compile, we needed to downgrade to Java 17. But first, we had to figure out which Java version to use. We tried Java 11, which matches the target language of the project, but it was too low for the Gradle version used in the repository.
+
+The repository already includes the Gradle Wrapper, so there was no need to install Gradle manually. Running `./gradlew build` and `./gradlew test` was not a problem.
+
+We consider that the required tools are well documented, with clear explanations on how to build and test the project.
+
+Gradle automatically downloaded and installed the necessary project dependencies. No additional dependencies had to be installed manually beyond having Java 17 available.
+
+Once we had Java 17 properly configured, the build completed successfully without errors and all the tests run successfully.
     
 See the assignment for details; if everything works out of the box,
 there is no need to write much here. If the first project(s) you picked
