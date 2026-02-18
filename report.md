@@ -137,11 +137,11 @@ public static boolean reflectionEquals(
             boolean testTransients,
             Class<?> reflectUpToClass,
             String[] excludeFields) {
-        if (lhs == rhs) { # +1
-            return true; # -1
+        if (lhs == rhs) { // +1
+            return true; // -1
         }
-        if (lhs == null || rhs == null) { # +2
-            return false;   # -1
+        if (lhs == null || rhs == null) { // +2
+            return false;   // -1
         }
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
@@ -150,40 +150,40 @@ public static boolean reflectionEquals(
         Class<?> lhsClass = lhs.getClass();
         Class<?> rhsClass = rhs.getClass();
         Class<?> testClass;
-        if (lhsClass.isInstance(rhs)) {     # +1
+        if (lhsClass.isInstance(rhs)) {     // +1
             testClass = lhsClass;
-            if (!rhsClass.isInstance(lhs)) {    # +1
+            if (!rhsClass.isInstance(lhs)) {    // +1
                 // rhsClass is a subclass of lhsClass
                 testClass = rhsClass;
             }
-        } else if (rhsClass.isInstance(lhs)) {  # +1
+        } else if (rhsClass.isInstance(lhs)) {  // +1
             testClass = rhsClass;
-            if (!lhsClass.isInstance(rhs)) {    # +1
+            if (!lhsClass.isInstance(rhs)) {    // +1
                 // lhsClass is a subclass of rhsClass
                 testClass = lhsClass;
             }
         } else {
             // The two classes are not related.
-            return false;   # -1
+            return false;   // -1
         }
         EqualsBuilder equalsBuilder = new EqualsBuilder();
-        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {  # +1
-            return false;   # -1
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {  // +1
+            return false;   // -1
         }
-        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { # +2
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) { // +2
             testClass = testClass.getSuperclass();
             if (reflectionAppend(
-                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {   # +1
-                return false;   # -1
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {   // +1
+                return false;   // -1
             }
         }
-        return equalsBuilder.isEquals();    # -1
+        return equalsBuilder.isEquals();    // -1
     }
     // π = 11, s = 6
     // M = π - s + 2 = 7
 ``` 
-- The purpose of the reflectionEquals function is to check if the lhs is equal to the right hand side and return true or false based on that.
-- The documentation is not very clear w.r.t all possible outcomes, but there is some helpful comments in terms of understanding how the function works.
+- The purpose of the reflectionEquals function is to check if the lhs object is equal to the rhs object and return true or false based on that.
+- The documentation is not very clear w.r.t all possible outcomes, but there is some helpful comments and javadocs in terms of understanding how the function works.
 
 
 ### Jannis:
