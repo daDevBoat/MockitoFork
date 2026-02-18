@@ -16,9 +16,25 @@ public class ArrayEquals extends Equals {
     @Override
     public boolean matches(Object actual) {
         Object wanted = getWanted();
-        if (wanted == null || actual == null) {
-            return super.matches(actual);
-        } else if (wanted instanceof boolean[] && actual instanceof boolean[]) {
+        if (wanted == null || actual == null) { // +1 +1 = +2
+            return super.matches(actual); // -1
+        }
+        Boolean primitiveResult = matchesPrimitiveArray(wanted, actual);
+        if(primitiveResult != null) { // +1
+            return primitiveResult; // -1
+        }
+        if(wanted instanceof Object[] && actual instanceof Object[]) { // +1 +1 = +2
+            return Arrays.equals((Object[]) wanted, (Object[]) actual); // -1
+        }
+        return false; // -1
+    }
+
+    // π = 5
+    // s = 4
+    // M = π - s + 2 = 3
+
+    private Boolean matchesPrimitiveArray(Object wanted, Object actual) {
+        if (wanted instanceof boolean[] && actual instanceof boolean[]) {
             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
         } else if (wanted instanceof byte[] && actual instanceof byte[]) {
             return Arrays.equals((byte[]) wanted, (byte[]) actual);
@@ -34,11 +50,9 @@ public class ArrayEquals extends Equals {
             return Arrays.equals((long[]) wanted, (long[]) actual);
         } else if (wanted instanceof short[] && actual instanceof short[]) {
             return Arrays.equals((short[]) wanted, (short[]) actual);
-        } else if (wanted instanceof Object[] && actual instanceof Object[]) {
-            return Arrays.equals((Object[]) wanted, (Object[]) actual);
         }
-        return false;
-    }
+        return null;
+    } 
 
     @Override
     public String toString() {
