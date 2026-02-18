@@ -400,6 +400,8 @@ integrate it with your build environment?
 Show a patch (or link to a branch) that shows the instrumented code to
 gather coverage measurements.
 
+[Own coverage tool](https://github.com/daDevBoat/MockitoFork/blob/code-coverage-tool/mockito-core/src/main/java/org/CoverageRecorder.java)
+
 The patch is probably too long to be copied here, so please add
 the git command that is used to obtain the patch instead:
 
@@ -410,11 +412,45 @@ its output?
 
 ### Evaluation
 
-1. How detailed is your coverage measurement?
+#### 1. How detailed is your coverage measurement?
 
-2. What are the limitations of your own tool?
+Our manual coverage tool measures branch coverage by explicitly instrumenting selected control-flow structures in the source code. For each branch, we: 
 
-3. Are the results of your tool consistent with existing coverage tools?
+1. Manually assign a unique ID.
+2. Register all possible branch IDs before execution `CoverageRecorder.register(Ids)`.
+3. Insert a `CoverageRecorder.mark(ID)` call at the beginning of each branch outcome.
+4. Generate a report at the end of execution showing the covered and uncovered branches.
+
+In our implmentation, we decided to define a branch as: 
+- Each outcome of an `if-else` statement. 
+- Each loop construct (`for and while`) 
+
+This means our coverage measurement is detailed whithin the scope we defined. However, we do not consider:
+
+- Ternary operators (`condition ? yes : no`) 
+- Short-circuit logical operators (`&&`, `||`)
+- Exception-handling control flow. 
+
+
+#### 2. What are the limitations of your own tool?
+
+The main limitations of our manual instrumentation are related to maintainability and completeness.
+
+First, it requires manual modification of the source code. Any change in control flow (for example, adding a new `else if` branch) requires updating the assign of the branch IDs.
+
+Second, the tool is error-prone, if we missed to mark a branch, the coverage report becomes inaccurate.
+
+If we modify the program, by adding a new else if branch, we must:
+1. Assign a new unique branch ID.
+2. Register it in CoverageRecorder.register();
+3. Insert a corresponding. CoverageRecorder.mark().
+
+
+#### 3. Are the results of your tool consistent with existing coverage tools?
+
+For the types of branches we explicitly decided to measure (i.e., `if-else` statements and loop constructs such as `for` and `while`), our manual coverage results are consistent with those reported by the automated coverage tool that we are using, `JaCoCo`. In this cases, both approaches are consistent, as they identify the same branch outcomes as covered or uncovered.
+
+`JaCoCo` provides a more precise and complete branch coverage measurment as itperforms bytecode-level instrumentation and therefore detects additional branches that we do not take into account. So our tool is consistent within the scope we have defined, but it does not capture all the possible branch outcomes that `JaCoCo` reports.
 
 ## Coverage improvement
 
