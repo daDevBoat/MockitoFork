@@ -611,20 +611,29 @@ class EqualsBuilder {
      */
     public EqualsBuilder append(int[] lhs, int[] rhs) {
         if (!isEquals) {
+            CoverageRecorder.mark(601);
             return this;
         }
+        CoverageRecorder.mark(602);
         if (lhs == rhs) {
+            CoverageRecorder.mark(603);
             return this;
         }
+        CoverageRecorder.mark(604);
         if (lhs == null || rhs == null) {
+            CoverageRecorder.mark(605);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(606);
         if (lhs.length != rhs.length) {
+            CoverageRecorder.mark(607);
             this.setEquals(false);
             return this;
         }
+        CoverageRecorder.mark(608);
         for (int i = 0; i < lhs.length && isEquals; ++i) {
+            CoverageRecorder.mark(609);
             append(lhs[i], rhs[i]);
         }
         return this;

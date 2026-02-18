@@ -27,6 +27,7 @@ public class CoverageTest {
         CoverageRecorder.register(301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311,
             312, 313, 314, 315, 316, 317, 318, 319);
         CoverageRecorder.register(501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511);
+        CoverageRecorder.register(601, 602, 603, 604, 605, 606, 607, 608, 609);
     }
 
     @AfterClass
