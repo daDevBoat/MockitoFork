@@ -274,23 +274,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
         try {
             for (Class<?> type : types) {
-                if (flat) {
-                    if (!mocked.contains(type) && flatMocked.add(type)) {
-                        assureInitialization(type);
-                        targets.add(type);
-                    }
-                } else {
-                    do {
-                        if (mocked.add(type)) {
-                            if (!flatMocked.remove(type)) {
-                                assureInitialization(type);
-                                targets.add(type);
-                            }
-                            addInterfaces(targets, type.getInterfaces());
-                        }
-                        type = type.getSuperclass();
-                    } while (type != null);
-                }
+                addTypeToTargets(type, flat, targets);
             }
         } catch (Throwable t) {
             for (Class<?> target : targets) {
@@ -301,33 +285,57 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         }
 
         if (!targets.isEmpty()) {
-            try {
-                assureCanReadMockito(targets);
-                instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
-                Throwable throwable = lastException;
-                if (throwable != null) {
-                    throw new IllegalStateException(
-                            join(
-                                    "Byte Buddy could not instrument all classes within the mock's type hierarchy",
-                                    "",
-                                    "This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:",
-                                    " - Compiled by older versions of scalac",
-                                    " - Classes that are part of the Android distribution"),
-                            throwable);
-                }
-            } catch (Exception exception) {
-                for (Class<?> failed : targets) {
-                    mocked.remove(failed);
-                    flatMocked.remove(failed);
-                }
-                throw new MockitoException("Could not modify all classes " + targets, exception);
-            } finally {
-                lastException = null;
-            }
+            retransformClasses(targets);
         }
 
         mocked.expungeStaleEntries();
         flatMocked.expungeStaleEntries();
+    }
+
+    private void addTypeToTargets(Class<?> type, boolean flat, Set<Class<?>> targets){
+        if (flat) {
+            if (!mocked.contains(type) && flatMocked.add(type)) {
+                assureInitialization(type);
+                targets.add(type);
+            }
+        } else {
+            do {
+                if (mocked.add(type)) {
+                    if (!flatMocked.remove(type)) {
+                        assureInitialization(type);
+                        targets.add(type);
+                    }
+                    addInterfaces(targets, type.getInterfaces());
+                }
+                type = type.getSuperclass();
+            } while (type != null);
+        }
+    }
+
+    private void retransformClasses(Set<Class<?>> targets){
+        try {
+            assureCanReadMockito(targets);
+            instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
+            Throwable throwable = lastException;
+            if (throwable != null) {
+                throw new IllegalStateException(
+                        join(
+                                "Byte Buddy could not instrument all classes within the mock's type hierarchy",
+                                "",
+                                "This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:",
+                                " - Compiled by older versions of scalac",
+                                " - Classes that are part of the Android distribution"),
+                        throwable);
+            }
+        } catch (Exception exception) {
+            for (Class<?> failed : targets) {
+                mocked.remove(failed);
+                flatMocked.remove(failed);
+            }
+            throw new MockitoException("Could not modify all classes " + targets, exception);
+        } finally {
+            lastException = null;
+        }
     }
 
     private void assureCanReadMockito(Set<Class<?>> types) {
