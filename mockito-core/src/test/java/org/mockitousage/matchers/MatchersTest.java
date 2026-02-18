@@ -427,6 +427,20 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
+    public void should_return_false_when_wanted_is_boolean_array_and_actual_is_different_array_type() {
+        /* Contract: if wanted is boolean[] but actual is not boolean[], the boolean[] && boolean[] condition must return false */
+        ArrayEquals matcher = new ArrayEquals(new boolean[] {true, false});
+        assertFalse(matcher.matches(new byte[] {1, 0}));
+    }
+
+    @Test
+    public void should_return_false_when_wanted_is_object_array_and_actual_is_primitive_array() {
+        /* Contract: if wanted is Object[] but actual is primitive array, the Object[] && Object[] condition must return false */
+        ArrayEquals matcher = new ArrayEquals(new String[] {"a", "b"});
+        assertFalse(matcher.matches(new int[] {1, 2}));
+    }
+
+    @Test
     public void greater_or_equal_matcher() {
         when(mock.oneArg(geq(7))).thenReturn(">= 7");
         when(mock.oneArg(lt(7))).thenReturn("< 7");
