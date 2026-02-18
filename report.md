@@ -487,11 +487,15 @@ A more elaborate report on the tests can be found in the `linked commit` and the
 
 Report of new coverage (for P): [tests_n1_n2](https://github.com/daDevBoat/MockitoFork/commit/542ef4482cf9fdc4a90cdeb90e5809932c06c1bd)
 
-Report of new coverage (for P+): [tests_n3_n4]()
+Report of new coverage (for P+): [tests_n3_n4](https://github.com/daDevBoat/MockitoFork/commit/703294937254d520f75cfa09c1219e9bfcb88657)
 
 1) TR1: matches(Object) must return false when wanted and actual are primitive arrays of different types, for example: int[] vs long[], even if numeric values are equivalent.
 
 2) TR2: matches(Object) must enter the branch when wanted != null and actual == null, and must return false via super.matches(actual).
+
+3) TR3: matches(Object), if wanted is boolean[] but actual is not boolean[], the boolean[] && boolean[] condition must return false.
+
+4) TR4: matches(Object), if wanted is Object[] but actual is primitive array, the Object[] && Object[] condition must return false.
 
 ### Jannis
 Commit of the 4 test, including coverage before and after: [GitHub](https://github.com/daDevBoat/MockitoFork/commit/7821a71ebc1eaf9370126713b7a69e5a6ff650ad)
