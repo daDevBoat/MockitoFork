@@ -415,7 +415,7 @@ The plan consists of applying an `Extract Method` refactoring pattern, by extrac
 
 We used `JaCoCo` as the automated coverage tool. In the Mockito repository, JaCoCo is already integrated into the Gradle build configuration, so no additional setup or installation was required.
 
-Our experience was very positive. It was straightforward to generate a coverage report by runnig `./gradlew clean test jacocoTestReport`. 
+Our experience was very positive. It was straightforward to generate a coverage report by running `./gradlew clean test jacocoTestReport`. 
 
 We found that running `clean` before executing the tests ensured that the coverage report was properly updated.
 
@@ -433,7 +433,7 @@ gather coverage measurements.
 - Arnau:  [matches() function](https://github.com/daDevBoat/MockitoFork/commit/62dc3981f76f53a9041b012a11aba6078093b2f6)
 - Elias
 - Jannis: [append](https://github.com/daDevBoat/MockitoFork/commit/b4f5e7f5ec69eca6fa0f0e3c93387bf6c9b701ab)
-- Jonatan
+- Jonatan [processAnnotationForMock](https://github.com/daDevBoat/MockitoFork/commit/ff57751306c2bbf1941d3203d5a9c27c05ea27f2#diff-04ea5ad3f5c1df787656eb2cd92305a86b2e48bf99455b9fb14260ee4a6a6424)
 - Alexander
 
 ### Evaluation
@@ -447,7 +447,7 @@ Our manual coverage tool measures branch coverage by explicitly instrumenting se
 3. Insert a `CoverageRecorder.mark(ID)` call at the beginning of each branch outcome.
 4. Generate a report at the end of execution showing the covered and uncovered branches.
 
-In our implmentation, we decided to define a branch as: 
+In our implementation, we decided to define a branch as: 
 - Each outcome of an `if-else` statement. 
 - Each loop construct (`for and while`) 
 
@@ -476,7 +476,7 @@ If we modify the program, by adding a new else if branch, we must:
 
 For the types of branches we explicitly decided to measure (i.e., `if-else` statements and loop constructs such as `for` and `while`), our manual coverage results are consistent with those reported by the automated coverage tool that we are using, `JaCoCo`. In this cases, both approaches are consistent, as they identify the same branch outcomes as covered or uncovered.
 
-`JaCoCo` provides a more precise and complete branch coverage measurment as itperforms bytecode-level instrumentation and therefore detects additional branches that we do not take into account. So our tool is consistent within the scope we have defined, but it does not capture all the possible branch outcomes that `JaCoCo` reports.
+`JaCoCo` provides a more precise and complete branch coverage measurment as it performs bytecode-level instrumentation and therefore detects additional branches that we do not take into account. So our tool is consistent within the scope we have defined, but it does not capture all the possible branch outcomes that `JaCoCo` reports.
 
 ## Coverage improvement
 For every test introduced we mention the TR that needed to be fullfilled to improve branch coverage.
@@ -510,6 +510,12 @@ Commit of the 4 test, including coverage before and after: [GitHub](https://gith
 4) TR: The append(char [], char[]) method sets the `isEquals` flag to false if both objects are of type char but have different lengths.
 
 ### Jonatan
+Commit of the 4 tests, including coverage before and after as a comment on the commit: [Github](https://github.com/daDevBoat/MockitoFork/commit/87ec5759be86e9fc329ef8c44fbbbd1217518b7b#commitcomment-177545435)
+
+1. TR: The mockMaker passed to the @Mock annotation is non-empty and set as specified.
+2. TR: A mockMaker is not passed to the @Mock annotation (i.e. it is empty), the Mock is still performed without setting an explicit mockMaker.
+3. TR: If a static class is mocked, the returned mock is of type MockedStatic and basic mock functionality (as mocking a function) works as expected.
+4. TR: If the constructor of a class is mocked, the returned mock is of type MockedConstruction and any calls to the constructors are mocked as expected.
 
 ### Elias 
 
