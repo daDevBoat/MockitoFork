@@ -449,7 +449,8 @@ gather coverage measurements.
 - Elias:   [reflectionEquals()](https://github.com/daDevBoat/MockitoFork/commit/4f98296824128b2cc12db14c66875086df066c0d)
 - Jannis: [append](https://github.com/daDevBoat/MockitoFork/commit/b4f5e7f5ec69eca6fa0f0e3c93387bf6c9b701ab)
 - Jonatan [processAnnotationForMock](https://github.com/daDevBoat/MockitoFork/commit/ff57751306c2bbf1941d3203d5a9c27c05ea27f2#diff-04ea5ad3f5c1df787656eb2cd92305a86b2e48bf99455b9fb14260ee4a6a6424)
-- Alexander
+- Alexander [triggerRetransformation() function]
+(https://github.com/daDevBoat/MockitoFork/commit/2f4ae1ffdf20ac709040dec7bca21239ad4f742e)
 
 ### Evaluation
 
