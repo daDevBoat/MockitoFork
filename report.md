@@ -545,6 +545,17 @@ Commit of the 6 (2 + 4) test for reflectEquals and append(int[], int[]), includi
 
 ### Alexander
 
+Commit of the 4 test, including coverage before and after: [GitHub]
+(https://github.com/daDevBoat/MockitoFork/commit/8cb70ce2173af52a20eaa2b23df6df18fd55fe25)
+
+1. TR: describeClass(Class<?> type) returns the string "null" and a description
+on the specific format when type is null 
+2. TR: describeClass(Object instance) returns the string "null" and a description
+on the specific format when instance is null
+3. TR: getHandler(Object mock) returns null when mock is not a MockAccess instance
+4. TR: createSpy(MockCreationSettings<T> settings, MockHandler handler, T object) throws
+MockitoConfigurationException with the message "Spy instance must not be null" when object
+is null
 
 ## Self-assessment: Way of working
 When comparing our way-of-working to the Essence checklist, we are in state `In-Place`. Looking at the checklist, we fulfill all the points prior to the state `Working-well`. 
