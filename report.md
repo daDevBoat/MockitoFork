@@ -407,6 +407,21 @@ The plan consists of applying an `Extract Method` refactoring pattern, by extrac
 **Implementation of the refactoring can be found here:**
 [ExtractMethod_refactor_matches](https://github.com/daDevBoat/MockitoFork/commit/2a4fcf36649b83f2324935883e3489de7e018a77)
 
+### Alexander
+For the `triggerRetransformation()` function, the original implementation had multiple responsibilities in a single method. This resulted in high cyclomatic complexity. The complexity arises from deeply nested conditional logic (if/else, do-while). 
+
+It is possible to reduce complexity by following the following refactoring plan:
+
+The plan consist of applying an `Extract Method` refactoring pattern, by extracting the type-processing logic into a dedicated helper method `addTypeToTargets()` and the instrumetation and exception handling logic into other separate method `retransformClasses()`.
+
+**Following and implementing the refactoring plan:**
+- With lizard, the cyclomatic complexity is reduced from `14` to `5`.
+- By hand, the cyclomatic complexity is reduced from `7` to `5`.
+
+**Implementation of the refactoring can be found here:**
+[ExtractMethod_triggerRetransformation_refactor](https://github.com/daDevBoat/MockitoFork/commit/a5a69695468a4c00ce6eb4729864545ff7584cd2)
+
+
 ## Coverage
 
 ### Tools
